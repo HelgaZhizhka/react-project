@@ -5,6 +5,7 @@ import styles from './SearchInput.module.scss';
 interface Props {
   value: string;
   onChange: (value: string) => void;
+  handleKeyDown: (value: string) => void;
   className?: string;
   placeholder?: string;
 }
@@ -12,6 +13,12 @@ interface Props {
 class SearchInput extends Component<Props> {
   handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     this.props.onChange(event.target.value);
+  };
+
+  handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      this.props.handleKeyDown(event.currentTarget.value);
+    }
   };
 
   render() {
@@ -23,7 +30,9 @@ class SearchInput extends Component<Props> {
         type="search"
         value={value}
         onChange={this.handleInputChange}
+        onKeyDown={this.handleKeyDown}
         placeholder={placeholder || ''}
+        autoFocus
       />
     );
   }

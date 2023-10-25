@@ -15,6 +15,11 @@ class Search extends Component<Props> {
     this.props.onInputChange(value);
   };
 
+  handleKeyDown = (value: string) => {
+    this.props.onInputChange(value);
+    this.props.onSearch();
+  };
+
   handleSearch = () => {
     this.props.onSearch();
   };
@@ -26,6 +31,7 @@ class Search extends Component<Props> {
           className={styles.input}
           value={this.props.value}
           onChange={this.handleInputChange}
+          handleKeyDown={this.handleKeyDown}
           placeholder="Search..."
         />
         <Button onClick={this.handleSearch}>Search</Button>
