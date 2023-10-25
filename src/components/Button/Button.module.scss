@@ -1,0 +1,18 @@
+.root {
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #0062cc;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
