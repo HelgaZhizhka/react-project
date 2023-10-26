@@ -12,11 +12,15 @@ const apiSearch = async (searchValue: string): Promise<SearchResponse> => {
   const API_URL = import.meta.env.VITE_API_URL;
 
   try {
-    const response = await fetch(`${API_URL}/search/movie?query=${searchValue}&api_key=${API_KEY}`);
+    const response = await fetch(
+      `${API_URL}/search/1movie?query=${searchValue}&api_key=${API_KEY}`
+    );
 
     if (!response.ok) {
+      const errorResponse = await response.json();
       const errorData: ApiError = {
-        message: `API request failed with status ${response.status}`,
+        message:
+          errorResponse.status_message || `API request failed with status ${response.status}`,
         status: response.status,
       };
       throw errorData;
@@ -24,13 +28,8 @@ const apiSearch = async (searchValue: string): Promise<SearchResponse> => {
 
     const data: SearchResponse = await response.json();
     return data;
-  } catch (error) {
-    console.error('Error fetching data from API:', error);
-    if (typeof error === 'string') {
-      throw { message: error };
-    } else {
-      throw error;
-    }
+  } catch (error: unknown) {
+    throw error;
   }
 };
 

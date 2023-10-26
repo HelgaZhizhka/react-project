@@ -2,8 +2,8 @@ import { Component } from 'react';
 
 import { apiSearch } from '../../api';
 import { Movie } from '../../utils/interfaces';
-import { isErrorWithMessage } from '../../utils/functions';
 import { Status } from '../../utils/types';
+import { hasErrorMessage } from '../../utils/functions';
 import { Search } from '../../components/Search';
 import { SearchResult } from '../../components/SearchResult';
 import { Spinner } from '../../components/Spinner';
@@ -16,7 +16,11 @@ interface State {
   error: string;
 }
 
-class Home extends Component<never, State> {
+interface Props {
+  className?: string;
+}
+
+class Home extends Component<Props, State> {
   state: State = {
     searchValue: localStorage.getItem('searchValue') || '',
     searchResults: [],
@@ -40,12 +44,11 @@ class Home extends Component<never, State> {
         searchResults: data.results,
         status: data.results.length ? 'success' : 'empty',
       });
-    } catch (error) {
-      if (isErrorWithMessage(error)) {
-        this.setState({ status: 'error', error: error.message });
-      } else {
-        this.setState({ status: 'error', error: 'An unexpected error occurred.' });
-      }
+    } catch (error: unknown) {
+      this.setState({
+        status: 'error',
+        error: hasErrorMessage(error) ? error.message : 'Unknown error.',
+      });
     }
   };
 
@@ -65,7 +68,7 @@ class Home extends Component<never, State> {
 
   renderEmpty = () => <h3>Nothing was found for your query. Try another query.</h3>;
 
-  renderError = () => <h3>Something went wrong {this.state.error}. Try again.</h3>;
+  renderError = () => <h3 className={styles.error}>{this.state.error}. Try again.</h3>;
 
   renderContent = () => {
     switch (this.state.status) {
