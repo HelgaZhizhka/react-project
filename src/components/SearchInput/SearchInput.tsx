@@ -27,7 +27,7 @@ class SearchInput extends Component<Props> {
     return (
       <input
         className={`${styles.root} ${className}`}
-        type="search"
+        type="text"
         value={value}
         onChange={this.handleInputChange}
         onKeyDown={this.handleKeyDown}

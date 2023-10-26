@@ -1,6 +1,6 @@
 import { Component } from 'react';
 
-import { Movie } from '../../types/interfaces';
+import { Movie } from '../../utils/interfaces';
 import { Button } from '../Button';
 import avatar from './avatar.png';
 import styles from './Card.module.scss';

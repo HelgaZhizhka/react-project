@@ -1,4 +1,4 @@
-import { ApiError, Movie } from '../types/interfaces';
+import { ApiError, Movie } from '../utils/interfaces';
 
 export interface SearchResponse {
   results: Movie[];

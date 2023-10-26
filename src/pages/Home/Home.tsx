@@ -1,10 +1,12 @@
 import { Component } from 'react';
 
 import { apiSearch } from '../../api';
-import { Movie } from '../../types/interfaces';
-import { Status } from '../../types/types';
+import { Movie } from '../../utils/interfaces';
+import { isErrorWithMessage } from '../../utils/functions';
+import { Status } from '../../utils/types';
 import { Search } from '../../components/Search';
 import { SearchResult } from '../../components/SearchResult';
+import { Spinner } from '../../components/Spinner';
 import styles from './Home.module.scss';
 
 interface State {
@@ -22,24 +24,28 @@ class Home extends Component<never, State> {
     error: '',
   };
 
-  handleInputChange = async (newValue: string): Promise<void> => {
+  handleInputChange = (newValue: string): void => {
     this.setState({ searchValue: newValue });
   };
 
   handleSearch = async (): Promise<void> => {
-    this.setState({ status: 'loading' });
+    this.setState({ status: 'loading', searchResults: [] });
 
     try {
       const value = this.state.searchValue.trim();
       localStorage.setItem('searchValue', value);
       const data = await apiSearch(value);
-      if (data.results.length) {
-        this.setState({ searchResults: data.results, status: 'success' });
-      } else {
-        this.setState({ searchResults: [], status: 'success' });
-      }
+
+      this.setState({
+        searchResults: data.results,
+        status: data.results.length ? 'success' : 'empty',
+      });
     } catch (error) {
-      this.setState({ status: 'error' });
+      if (isErrorWithMessage(error)) {
+        this.setState({ status: 'error', error: error.message });
+      } else {
+        this.setState({ status: 'error', error: 'An unexpected error occurred.' });
+      }
     }
   };
 
@@ -51,31 +57,35 @@ class Home extends Component<never, State> {
     }
   }
 
-  render() {
-    const { searchValue, searchResults, status } = this.state;
+  renderIdle = () => <h2>Find your favorite movie!</h2>;
 
-    let content;
+  renderLoading = () => <Spinner />;
 
-    switch (status) {
+  renderSuccess = () => <SearchResult results={this.state.searchResults} />;
+
+  renderEmpty = () => <h3>Nothing was found for your query. Try another query.</h3>;
+
+  renderError = () => <h3>Something went wrong {this.state.error}. Try again.</h3>;
+
+  renderContent = () => {
+    switch (this.state.status) {
       case 'idle':
-        content = <h2>Find your favorite movie!</h2>;
-        break;
+        return this.renderIdle();
       case 'loading':
-        content = <p>Loading...</p>;
-        break;
+        return this.renderLoading();
       case 'success':
-        content = searchResults.length ? (
-          <SearchResult results={searchResults} />
-        ) : (
-          <h3>Nothing was found for your query. Try another query.</h3>
-        );
-        break;
+        return this.renderSuccess();
+      case 'empty':
+        return this.renderEmpty();
       case 'error':
-        content = <h3>Something went wrong. Try again.</h3>;
-        break;
+        return this.renderError();
       default:
-        content = <p>Unknown condition.</p>;
+        return <p>Unknown condition.</p>;
     }
+  };
+
+  render() {
+    const { searchValue } = this.state;
 
     return (
       <div className={styles.container}>
@@ -84,7 +94,7 @@ class Home extends Component<never, State> {
           onInputChange={this.handleInputChange}
           onSearch={this.handleSearch}
         />
-        <div className={styles.section}>{content}</div>
+        <div className={styles.section}>{this.renderContent()}</div>
       </div>
     );
   }

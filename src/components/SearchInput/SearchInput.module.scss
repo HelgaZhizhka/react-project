@@ -3,8 +3,8 @@
   border-radius: 3px;
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #fff;
-  color: #333;
+  background-color: var(--component-bg);
+  color: var(--color-text);
   transition: all 0.3s ease-in-out;
 
   &:focus {
@@ -12,6 +12,6 @@
   }
 
   &::placeholder {
-    color: #999;
+    color: var(--color-lightgray);
   }
 }
