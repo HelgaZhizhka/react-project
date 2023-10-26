@@ -12,9 +12,7 @@ const apiSearch = async (searchValue: string): Promise<SearchResponse> => {
   const API_URL = import.meta.env.VITE_API_URL;
 
   try {
-    const response = await fetch(
-      `${API_URL}/search/1movie?query=${searchValue}&api_key=${API_KEY}`
-    );
+    const response = await fetch(`${API_URL}/search/movie?query=${searchValue}&api_key=${API_KEY}`);
 
     if (!response.ok) {
       const errorResponse = await response.json();
