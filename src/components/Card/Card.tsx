@@ -5,11 +5,11 @@ import { Button } from '../Button';
 import avatar from './avatar.png';
 import styles from './Card.module.scss';
 
-interface CardState {
+interface State {
   expanded: boolean;
 }
 
-class Card extends Component<Movie, CardState> {
+class Card extends Component<Movie, State> {
   state = {
     expanded: false,
   };

@@ -7,7 +7,7 @@
   --color-gray: #333;
   --color-lightgray: #999;
   --color-error: #dc3545;
-  --shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   --body-bg: var(--color-light);
   --component-bg: var(--color-white);
   --color-text: #343434;
@@ -46,13 +46,24 @@ body {
 img {
   max-width: 100%;
   height: auto;
-  border: 0
+  border: 0;
+}
+
+.error-component {
+  display: block;
+  margin: 10px 10px 10px auto;
+
+  @media (min-width: 1280px) {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --body-bg: #242424;
-    --component-bg: #312F2F;
+    --component-bg: #312f2f;
     --color-text: rgba(255, 255, 255, 0.87);
   }
 }

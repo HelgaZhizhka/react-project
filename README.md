@@ -10,34 +10,34 @@ This project is built using:
 
 1. **Installation**
 
-    First, make sure you have Node.js installed. If not, download and install it from [nodejs.org](https://nodejs.org/).
+   First, make sure you have Node.js installed. If not, download and install it from [nodejs.org](https://nodejs.org/).
 
-    ```bash
-    # Clone the repository
-    git clone react-project
-    
-    # Go to the project directory
-    cd react-project
-    
-    # Install dependencies
-    npm install
-    ```
+   ```bash
+   # Clone the repository
+   git clone react-project
+
+   # Go to the project directory
+   cd react-project
+
+   # Install dependencies
+   npm install
+   ```
 
 2. **Running the Project**
 
-    ```bash
-    # To start the development server
-    npm run dev
-    ```
+   ```bash
+   # To start the development server
+   npm run dev
+   ```
 
-    The app should now be up and running at `http://localhost:5173/`!
+   The app should now be up and running at `http://localhost:5173/`!
 
 3. **Building for Production**
 
-    ```bash
-    # To build the app for production
-    npm run build
-    ```
+   ```bash
+   # To build the app for production
+   npm run build
+   ```
 
 ## Features
 
@@ -46,7 +46,6 @@ This project is built using:
 - Search functionality using The Movie Database API.
 - Pagination support.
 - Error handling and data validation.
-
 
 ## License
 
