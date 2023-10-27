@@ -1,12 +1,13 @@
 import { Component } from 'react';
 
-import { apiSearch } from '../../api';
+import { apiGetPopularity, apiSearch } from '../../api';
 import { Movie } from '../../utils/interfaces';
 import { Status } from '../../utils/types';
 import { hasErrorMessage } from '../../utils/functions';
 import { Search } from '../../components/Search';
 import { SearchResult } from '../../components/SearchResult';
 import { Spinner } from '../../components/Spinner';
+import { NotFound } from '../../components/NotFound';
 import styles from './Home.module.scss';
 
 interface State {
@@ -24,7 +25,7 @@ class Home extends Component<Props, State> {
   state: State = {
     searchValue: localStorage.getItem('searchValue') || '',
     searchResults: [],
-    status: 'idle',
+    status: 'loading',
     error: '',
   };
 
@@ -34,6 +35,11 @@ class Home extends Component<Props, State> {
 
   handleSearch = async (): Promise<void> => {
     this.setState({ status: 'loading', searchResults: [] });
+
+    if (!this.state.searchValue) {
+      this.loadingData();
+      return;
+    }
 
     try {
       const value = this.state.searchValue.trim();
@@ -52,38 +58,43 @@ class Home extends Component<Props, State> {
     }
   };
 
+  loadingData = async (): Promise<void> => {
+    this.setState({ status: 'loading', searchResults: [] });
+
+    try {
+      const data = await apiGetPopularity();
+      this.setState({
+        searchResults: data.results,
+        status: data.results.length ? 'success' : 'empty',
+      });
+    } catch (error: unknown) {
+      this.setState({
+        status: 'error',
+        error: hasErrorMessage(error) ? error.message : 'Unknown error.',
+      });
+    }
+  };
+
   componentDidMount() {
     if (this.state.searchValue) {
       this.handleSearch();
     } else {
-      this.setState({ status: 'idle' });
+      this.loadingData();
     }
   }
 
-  renderIdle = () => <h2>Find your favorite movie!</h2>;
-
-  renderLoading = () => <Spinner />;
-
-  renderSuccess = () => <SearchResult results={this.state.searchResults} />;
-
-  renderEmpty = () => <h3>Nothing was found for your query. Try another query.</h3>;
-
-  renderError = () => <h3 className={styles.error}>{this.state.error}. Try again.</h3>;
-
   renderContent = () => {
     switch (this.state.status) {
-      case 'idle':
-        return this.renderIdle();
       case 'loading':
-        return this.renderLoading();
+        return <Spinner size="large" variant="global" />;
       case 'success':
-        return this.renderSuccess();
+        return <SearchResult results={this.state.searchResults} />;
       case 'empty':
-        return this.renderEmpty();
+        return <NotFound />;
       case 'error':
-        return this.renderError();
+        return <h3 className={styles.error}>{this.state.error}. Try again.</h3>;
       default:
-        return <p>Unknown condition.</p>;
+        return <p>Oops! Something went unknown...</p>;
     }
   };
 

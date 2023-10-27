@@ -35,10 +35,10 @@ class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div className={styles.root}>
-          <h1 className={styles['error-message']}>Oops! Something went wrong...</h1>
+          <h1 className={styles.title}>Oops! Something went wrong...</h1>
           <p>We encountered a problem trying to display this section.</p>
           <p>Please try refreshing the page or come back later.</p>
-          <details className={styles['error-details']}>
+          <details className={styles.details}>
             <p>{this.state.error && this.state.error.toString()}</p>
             <p>{this.state.errorInfo?.componentStack}</p>
           </details>

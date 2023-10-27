@@ -1,1 +1,2 @@
-export { default as apiSearch } from './api';
+export { apiSearch } from './api';
+export { apiGetPopularity } from './api';

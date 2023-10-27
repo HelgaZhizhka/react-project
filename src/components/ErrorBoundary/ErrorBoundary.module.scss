@@ -7,22 +7,22 @@
   padding: 20px;
   background-color: #f8f8f8;
   text-align: center;
+  color: var(--color-gray);
 
   p {
     margin: 0;
   }
 }
 
-.error-message {
+.title {
   font-size: 32px;
   font-weight: 700;
   color: var(--color-error);
   margin-bottom: 16px;
 }
 
-.error-details {
+.details {
   font-size: 16px;
-  color: var(--color-text);
   margin-bottom: 16px;
   white-space: 'pre-wrap';
   font-style: italic;
