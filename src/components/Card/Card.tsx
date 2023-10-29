@@ -1,7 +1,6 @@
 import { Component } from 'react';
 
 import { Movie } from '../../utils/interfaces';
-import { DELAY } from '../../constants';
 import { Button } from '../Button';
 import { Spinner } from '../Spinner';
 import avatar from './avatar.png';
@@ -23,9 +22,7 @@ class Card extends Component<Movie, State> {
   };
 
   handleImageLoad = () => {
-    setTimeout(() => {
-      this.setState({ loading: false });
-    }, DELAY);
+    this.setState({ loading: false });
   };
 
   render() {
