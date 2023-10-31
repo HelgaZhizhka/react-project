@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 
 import { apiGetPopularity, apiSearch } from '../../api';
 import { Movie } from '../../utils/interfaces';
@@ -10,108 +10,92 @@ import { Spinner } from '../../components/Spinner';
 import { NotFound } from '../../components/NotFound';
 import styles from './Home.module.scss';
 
-interface State {
-  searchValue: string;
-  searchResults: Movie[];
-  status: Status;
-  error: string;
-}
+// interface State {
+//   searchValue: string;
+//   searchResults: Movie[];
+//   status: Status;
+//   error: string;
+// }
 
 interface Props {
   className?: string;
 }
 
-class Home extends Component<Props, State> {
-  state: State = {
-    searchValue: localStorage.getItem('searchValue') || '',
-    searchResults: [],
-    status: 'loading',
-    error: '',
+const Home: React.FC<Props> = () => {
+  const [searchValue, setSearchValue] = useState<string>(localStorage.getItem('searchValue') || '');
+  const [searchResults, setSearchResults] = useState<Movie[]>([]);
+  const [status, setStatus] = useState<Status>('loading');
+  const [error, setError] = useState<string>('');
+
+  const handleInputChange = (newValue: string): void => {
+    setSearchValue(newValue);
   };
 
-  handleInputChange = (newValue: string): void => {
-    this.setState({ searchValue: newValue });
-  };
+  const handleSearch = async (): Promise<void> => {
+    setStatus('loading');
+    setSearchResults([]);
 
-  handleSearch = async (): Promise<void> => {
-    this.setState({ status: 'loading', searchResults: [] });
-
-    if (!this.state.searchValue) {
-      this.loadingData();
+    if (!searchValue) {
+      loadingData();
       return;
     }
 
     try {
-      const value = this.state.searchValue.trim();
+      const value = searchValue.trim();
       localStorage.setItem('searchValue', value);
       const data = await apiSearch(value);
 
-      this.setState({
-        searchResults: data.results,
-        status: data.results.length ? 'success' : 'empty',
-      });
+      setSearchResults(data.results);
+      setStatus(data.results.length ? 'success' : 'empty');
     } catch (error: unknown) {
-      this.setState({
-        status: 'error',
-        error: hasErrorMessage(error) ? error.message : 'Unknown error.',
-      });
+      setStatus('error');
+      setError(hasErrorMessage(error) ? error.message : 'Unknown error.');
     }
   };
 
-  loadingData = async (): Promise<void> => {
-    this.setState({ status: 'loading', searchResults: [] });
+  const loadingData = async (): Promise<void> => {
+    setStatus('loading');
+    setSearchResults([]);
 
     try {
       const data = await apiGetPopularity();
-      this.setState({
-        searchResults: data.results,
-        status: data.results.length ? 'success' : 'empty',
-      });
+      setSearchResults(data.results);
+      setStatus(data.results.length ? 'success' : 'empty');
     } catch (error: unknown) {
-      this.setState({
-        status: 'error',
-        error: hasErrorMessage(error) ? error.message : 'Unknown error.',
-      });
+      setStatus('error');
+      setError(hasErrorMessage(error) ? error.message : 'Unknown error.');
     }
   };
 
-  componentDidMount() {
-    if (this.state.searchValue) {
-      this.handleSearch();
-    } else {
-      this.loadingData();
-    }
-  }
-
-  renderContent = () => {
-    switch (this.state.status) {
+  const renderContent = () => {
+    switch (status) {
       case 'loading':
         return <Spinner size="large" variant="global" />;
       case 'success':
-        return <SearchResult results={this.state.searchResults} />;
+        return <SearchResult results={searchResults} />;
+      case 'error':
+        return <h3 className={styles.error}>{error}. Try again.</h3>;
       case 'empty':
         return <NotFound />;
-      case 'error':
-        return <h3 className={styles.error}>{this.state.error}. Try again.</h3>;
       default:
         return <p>Oops! Something went unknown...</p>;
     }
   };
 
-  render() {
-    const { searchValue } = this.state;
+  useEffect(() => {
+    if (searchValue) {
+      handleSearch();
+    } else {
+      loadingData();
+    }
+  }, []);
 
-    return (
-      <div className={styles.container}>
-        <Search
-          value={searchValue}
-          onInputChange={this.handleInputChange}
-          onSearch={this.handleSearch}
-        />
-        <div className={styles.section}>{this.renderContent()}</div>
-      </div>
-    );
-  }
-}
+  return (
+    <div className={styles.container}>
+      <Search value={searchValue} onInputChange={handleInputChange} onSearch={handleSearch} />
+      <div className={styles.section}>{renderContent()}</div>
+    </div>
+  );
+};
 
 export default Home;
