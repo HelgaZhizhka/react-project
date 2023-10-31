@@ -1,0 +1,92 @@
+.root {
+  position: relative;
+  min-height: 120px;
+  background-color: var(--component-bg);
+  box-shadow: var(--shadow);
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: translateY(-10px);
+  }
+
+  @media (min-width: 768px) {
+    display: flex;
+    padding: 10px;
+  }
+}
+
+.image {
+  border-radius: 10px 10px 0 0;
+  width: 100%;
+  object-fit: cover;
+  object-position: top;
+
+  @media (min-width: 768px) {
+    flex: 0 0 200px;
+    max-width: 200px;
+    height: 200px;
+    margin-left: 5px;
+    order: 1;
+    border-radius: 10px;
+  }
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+
+.content {
+  padding: 20px 20px 10px;
+
+  @media (min-width: 768px) {
+    flex: 1;
+  }
+}
+
+.title {
+  margin-top: 0;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.description {
+  margin: 0 0 10px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.is-hidden {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.release {
+  margin: 5px 0;
+  font-size: 12px;
+}
+
+.release,
+.rating {
+  margin: 0;
+  font-weight: 700;
+}
+
+.rating {
+  text-align: right;
+}
+
+.toggleButton {
+  background-color: transparent;
+  padding: 0;
+  font-weight: 700;
+  color: var(--color-brand);
+
+  &:hover {
+    background-color: transparent;
+    color: inherit;
+  }
+}

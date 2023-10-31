@@ -1,0 +1,13 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--component-bg);
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: var(--shadow);
+}
+
+.input {
+  width: 100%;
+}
