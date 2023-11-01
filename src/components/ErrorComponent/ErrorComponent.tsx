@@ -1,34 +1,30 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Button } from '../Button';
 import styles from './ErrorComponent.module.scss';
-
-interface State {
-  throwError: boolean;
-}
 
 interface Props {
   className: string;
 }
 
-class ErrorComponent extends Component<Props, State> {
-  state = { throwError: false };
+const ErrorComponent: React.FC<Props> = ({ className }) => {
+  const [throwError, setThrowError] = useState(false);
 
-  handleClick = () => {
-    this.setState({ throwError: true });
+  const handleClick = () => {
+    setThrowError(true);
   };
 
-  render() {
-    if (this.state.throwError) {
+  useEffect(() => {
+    if (throwError) {
       throw new Error('I crashed!');
     }
+  }, [throwError]);
 
-    return (
-      <Button className={`${styles.button} ${this.props.className}`} onClick={this.handleClick}>
-        Trigger Error
-      </Button>
-    );
-  }
-}
+  return (
+    <Button className={`${styles.button} ${className}`} onClick={handleClick}>
+      Trigger Error
+    </Button>
+  );
+};
 
 export default ErrorComponent;

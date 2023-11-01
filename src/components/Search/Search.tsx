@@ -1,5 +1,3 @@
-import { Component } from 'react';
-
 import { SearchInput } from '../SearchInput';
 import { Button } from '../Button';
 import styles from './Search.module.scss';
@@ -10,34 +8,28 @@ interface Props {
   onSearch: () => void;
 }
 
-class Search extends Component<Props> {
-  handleInputChange = (value: string) => {
-    this.props.onInputChange(value);
+const Search: React.FC<Props> = ({ value, onInputChange, onSearch }) => {
+  const handleInputChange = (value: string) => {
+    onInputChange(value);
   };
 
-  handleKeyDown = (value: string) => {
-    this.props.onInputChange(value);
-    this.props.onSearch();
+  const handleKeyDown = (value: string) => {
+    onInputChange(value);
+    onSearch();
   };
 
-  handleSearch = () => {
-    this.props.onSearch();
-  };
-
-  render() {
-    return (
-      <div className={styles.root}>
-        <SearchInput
-          className={styles.input}
-          value={this.props.value}
-          onChange={this.handleInputChange}
-          handleKeyDown={this.handleKeyDown}
-          placeholder="Search..."
-        />
-        <Button onClick={this.handleSearch}>Search</Button>
-      </div>
-    );
-  }
-}
+  return (
+    <div className={styles.root}>
+      <SearchInput
+        className={styles.input}
+        value={value}
+        onChange={handleInputChange}
+        handleKeyDown={handleKeyDown}
+        placeholder="Search..."
+      />
+      <Button onClick={onSearch}>Search</Button>
+    </div>
+  );
+};
 
 export default Search;

@@ -36,7 +36,6 @@
   visibility: hidden;
 }
 
-
 .content {
   padding: 20px 20px 10px;
 
@@ -56,12 +55,15 @@
   margin: 0 0 10px;
   font-size: 16px;
   line-height: 1.5;
-}
-
-.is-hidden {
-  max-width: 120px;
+  max-height: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: justify;
+  transition: max-height 0.35s ease;
+}
+
+.expanded {
+  max-height: none;
 }
 
 .release {

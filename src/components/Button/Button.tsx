@@ -1,5 +1,3 @@
-import { Component } from 'react';
-
 import styles from './Button.module.scss';
 
 interface Props {
@@ -8,18 +6,14 @@ interface Props {
   className?: string;
 }
 
-class Button extends Component<Props> {
-  render() {
-    const { className, onClick, children } = this.props;
+const Button: React.FC<Props> = ({ children, onClick, className }) => {
+  const btnClass = !className ? styles.root : `${styles.root} ${className}`;
 
-    const btnClass = !className ? styles.root : `${styles.root} ${className}`;
-
-    return (
-      <button className={btnClass} onClick={onClick}>
-        {children}
-      </button>
-    );
-  }
-}
+  return (
+    <button className={btnClass} onClick={onClick}>
+      {children}
+    </button>
+  );
+};
 
 export default Button;

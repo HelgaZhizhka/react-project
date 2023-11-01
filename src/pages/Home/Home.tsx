@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import { apiGetPopularity, apiSearch } from '../../api';
 import { Movie } from '../../utils/interfaces';
@@ -10,55 +10,33 @@ import { Spinner } from '../../components/Spinner';
 import { NotFound } from '../../components/NotFound';
 import styles from './Home.module.scss';
 
-// interface State {
-//   searchValue: string;
-//   searchResults: Movie[];
-//   status: Status;
-//   error: string;
-// }
-
-interface Props {
-  className?: string;
-}
-
-const Home: React.FC<Props> = () => {
+const Home: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>(localStorage.getItem('searchValue') || '');
   const [searchResults, setSearchResults] = useState<Movie[]>([]);
   const [status, setStatus] = useState<Status>('loading');
   const [error, setError] = useState<string>('');
 
-  const handleInputChange = (newValue: string): void => {
+  const handleInputChange = useCallback((newValue: string): void => {
     setSearchValue(newValue);
+    localStorage.setItem('searchValue', newValue);
+  }, []);
+
+  const resetSearchResults = (): void => {
+    setStatus('loading');
+    setSearchResults([]);
   };
 
   const handleSearch = async (): Promise<void> => {
-    setStatus('loading');
-    setSearchResults([]);
-
-    if (!searchValue) {
-      loadingData();
-      return;
-    }
+    resetSearchResults();
 
     try {
-      const value = searchValue.trim();
-      localStorage.setItem('searchValue', value);
-      const data = await apiSearch(value);
+      let data;
+      if (searchValue.trim()) {
+        data = await apiSearch(searchValue.trim());
+      } else {
+        data = await apiGetPopularity();
+      }
 
-      setSearchResults(data.results);
-      setStatus(data.results.length ? 'success' : 'empty');
-    } catch (error: unknown) {
-      setStatus('error');
-      setError(hasErrorMessage(error) ? error.message : 'Unknown error.');
-    }
-  };
-
-  const loadingData = async (): Promise<void> => {
-    setStatus('loading');
-    setSearchResults([]);
-
-    try {
-      const data = await apiGetPopularity();
       setSearchResults(data.results);
       setStatus(data.results.length ? 'success' : 'empty');
     } catch (error: unknown) {
@@ -83,11 +61,7 @@ const Home: React.FC<Props> = () => {
   };
 
   useEffect(() => {
-    if (searchValue) {
-      handleSearch();
-    } else {
-      loadingData();
-    }
+    handleSearch();
   }, []);
 
   return (

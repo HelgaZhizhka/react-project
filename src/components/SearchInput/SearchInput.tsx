@@ -1,5 +1,3 @@
-import { Component, ChangeEvent } from 'react';
-
 import styles from './SearchInput.module.scss';
 
 interface Props {
@@ -10,32 +8,34 @@ interface Props {
   placeholder?: string;
 }
 
-class SearchInput extends Component<Props> {
-  handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    this.props.onChange(event.target.value);
+const SearchInput: React.FC<Props> = ({
+  value,
+  onChange,
+  handleKeyDown,
+  className,
+  placeholder,
+}) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(event.target.value);
   };
 
-  handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      this.props.handleKeyDown(event.currentTarget.value);
+      handleKeyDown(event.currentTarget.value);
     }
   };
 
-  render() {
-    const { className, value, placeholder } = this.props;
-
-    return (
-      <input
-        className={`${styles.root} ${className}`}
-        type="text"
-        value={value}
-        onChange={this.handleInputChange}
-        onKeyDown={this.handleKeyDown}
-        placeholder={placeholder || ''}
-        autoFocus
-      />
-    );
-  }
-}
+  return (
+    <input
+      className={`${styles.root} ${className}`}
+      type="text"
+      value={value}
+      onChange={handleInputChange}
+      onKeyDown={handleKey}
+      placeholder={placeholder || ''}
+      autoFocus
+    />
+  );
+};
 
 export default SearchInput;
