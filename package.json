@@ -19,8 +19,10 @@
     ]
   },
   "devDependencies": {
+    "@types/node": "^20.8.10",
     "@types/react": "^18.2.30",
     "@types/react-dom": "^18.2.14",
+    "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.3",
@@ -34,11 +36,15 @@
     "eslint-plugin-react-refresh": "^0.4.3",
     "husky": "^8.0.0",
     "lint-staged": "^14.0.1",
+    "miragejs": "^0.1.48",
     "prettier": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.69.4",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
+  },
+  "dependencies": {
+    "react-router-dom": "^6.18.0"
   }
 }

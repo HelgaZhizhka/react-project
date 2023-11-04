@@ -1,12 +1,14 @@
+import { BrowserRouter as Router } from 'react-router-dom';
+
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { ErrorComponent } from './components/ErrorComponent';
-import { Home } from './pages/Home';
+import { AppRoutes } from './routes';
 
 const App: React.FC = () => (
   <ErrorBoundary>
     <>
-      <ErrorComponent className="error-component" />
-      <Home />
+      <Router>
+        <AppRoutes />
+      </Router>
     </>
   </ErrorBoundary>
 );

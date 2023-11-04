@@ -1,11 +1,14 @@
 .root {
+  position: sticky;
+  top: 5px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 10px;
   background-color: var(--component-bg);
-  padding: 10px 20px;
-  border-radius: 5px;
   box-shadow: var(--shadow);
+  border-radius: 5px;
+  z-index: 10;
 }
 
 .input {

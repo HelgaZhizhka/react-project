@@ -1,0 +1,15 @@
+.root {
+  padding: 20px 0;
+  background-color: var(--color-brand-hover);
+  color: var(--color-white);
+  text-align: center;
+}
+
+.link {
+  color: var(--color-white);
+  margin: 0 10px;
+  &:hover {
+    color: var(--color-white);
+    text-decoration: underline;
+  }
+}

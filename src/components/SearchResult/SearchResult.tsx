@@ -1,20 +1,18 @@
-import { Movie } from '../../utils/interfaces';
+import { Photo } from '../../utils/interfaces';
 import { Card } from '../Card';
 import styles from './SearchResult.module.scss';
 
 interface Props {
-  results: Movie[];
+  results: Photo[];
 }
 
 const SearchResult: React.FC<Props> = ({ results }) => {
   return (
-    <>
-      {results.map((item: Movie) => (
-        <div className={styles.card} key={item.id}>
-          <Card {...item} />
-        </div>
+    <div className={styles.root}>
+      {results.map((item: Photo) => (
+        <Card key={item.id} {...item} />
       ))}
-    </>
+    </div>
   );
 };
 

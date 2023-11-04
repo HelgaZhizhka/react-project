@@ -43,7 +43,7 @@ This project is built using:
 
 - Modern UI design.
 - Responsive layout.
-- Search functionality using The Movie Database API.
+- Search functionality using [The Movie Database API](https://developer.themoviedb.org/docs).
 - Pagination support.
 - Error handling and data validation.
 
