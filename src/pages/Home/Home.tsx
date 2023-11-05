@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Outlet, useSearchParams } from 'react-router-dom';
 
 import { apiGetPopularity, apiSearch } from '../../api';
 import { Photo } from '../../utils/interfaces';
@@ -35,6 +35,7 @@ const Home: React.FC = () => {
 
   const handleInputChange = useCallback((newValue: string): void => {
     setSearchValue(newValue);
+    setSearchParams({ page: '1', per_page: perPage.toString() });
     localStorage.setItem('searchValue', newValue);
   }, []);
 
@@ -60,12 +61,17 @@ const Home: React.FC = () => {
     }
   };
 
+  const handleItemClick = (id: number) => {
+    searchParams.set('details', id.toString());
+    setSearchParams(searchParams);
+  };
+
   const renderContent = () => {
     switch (status) {
       case 'loading':
         return <Spinner size="large" variant="global" />;
       case 'success':
-        return <SearchResult results={searchResults} />;
+        return <SearchResult results={searchResults} onItemClick={handleItemClick} />;
       case 'error':
         return <h3 className={styles.error}>{error}. Try again.</h3>;
       case 'empty':
@@ -79,6 +85,10 @@ const Home: React.FC = () => {
     const page = parseInt(searchParams.get('page') || '1', 10);
     const perPageFromURL = parseInt(searchParams.get('per_page') || `${PER_PAGE[10]}`, 10);
 
+    if (searchParams.get('details')) {
+      return;
+    }
+
     if (perPageFromURL !== perPage) {
       setPerPage(perPageFromURL);
     }
@@ -89,8 +99,10 @@ const Home: React.FC = () => {
   return (
     <div className="container">
       <Search value={searchValue} onInputChange={handleInputChange} onSearch={handleSearch} />
-
-      <div className={styles.section}>{renderContent()}</div>
+      <div className={styles.wrapper}>
+        <div className={styles.section}>{renderContent()}</div>
+        <Outlet />
+      </div>
 
       <div className={styles.footer}>
         <Select value={perPage} onChange={handlePerPageChange} />

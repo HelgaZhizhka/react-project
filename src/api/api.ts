@@ -74,3 +74,29 @@ export const apiGetPopularity = async (
     throw error;
   }
 };
+
+export const apiGetPhoto = async (id: number): Promise<Photo> => {
+  try {
+    const response = await fetch(`${API_URL}/photos/${id}`, {
+      headers: {
+        Authorization: API_KEY,
+      },
+    });
+
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      const errorData: ApiError = {
+        message:
+          errorResponse.status_message || `API request failed with status ${response.status}`,
+        status: response.status,
+      };
+
+      throw errorData;
+    }
+
+    const data: Photo = await response.json();
+    return data;
+  } catch (error: unknown) {
+    throw error;
+  }
+};
