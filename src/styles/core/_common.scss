@@ -1,0 +1,30 @@
+a {
+  font-weight: 500;
+  color: var(--color-brand);
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: var(--color-brand-hover);
+}
+
+body {
+  background-color: var(--body-bg);
+  font-family: 'Work Sans', sans-serif;
+  font-size: 1rem;
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 0 20px;
+}
+

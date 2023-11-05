@@ -1,0 +1,19 @@
+.root {
+  position: relative;
+}
+
+.section {
+  margin-top: 20px;
+}
+
+.error {
+  color: var(--color-error);
+}
+
+.footer {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
