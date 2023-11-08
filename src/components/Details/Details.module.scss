@@ -10,7 +10,14 @@
 
 .container {
   min-height: 100%;
-  padding: 20px;
+  padding: 50px 20px 20px;
   background-color: var(--component-bg);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.close {
+  position: absolute;
+  top: 5px;
+  right: 20px;
+  z-index: 10;
 }

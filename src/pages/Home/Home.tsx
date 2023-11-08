@@ -19,6 +19,7 @@ const Home: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>(localStorage.getItem('searchValue') || '');
   const [searchResults, setSearchResults] = useState<Photo[]>([]);
   const [status, setStatus] = useState<Status>('loading');
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [error, setError] = useState<string>('');
   const [perPage, setPerPage] = useState<number>(PER_PAGE[10]);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -67,6 +68,7 @@ const Home: React.FC = () => {
   };
 
   const handleItemClick = (id: number) => {
+    setIsDetailsOpen(true);
     navigate(`${RoutePaths.DETAILS}?id=${id}&page=${currentPage}`);
   };
 
@@ -87,15 +89,14 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const page = parseInt(searchParams.get('page') || '1', 10);
-    const id = searchParams.get('id');
 
-    if (id) {
+    if (isDetailsOpen) {
       return;
     }
 
     handleSearch(page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+  }, [searchParams, isDetailsOpen]);
 
   return (
     <div className="container">

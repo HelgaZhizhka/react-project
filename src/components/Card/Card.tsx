@@ -36,7 +36,7 @@ const Card: React.FC<Props> = ({
       <div className={styles.wrapper} style={{ backgroundColor: avg_color }}>
         <img
           className={`${styles.image} ${loading ? styles.hidden : ''}`}
-          src={src.medium}
+          src={isDetailed ? src.large : src.medium}
           alt={alt}
           onLoad={handleImageLoad}
           onError={handleImageError}
@@ -47,7 +47,9 @@ const Card: React.FC<Props> = ({
         <Spinner />
       ) : (
         <div className={styles.content}>
-          {photographer && <h2 className={styles.title}>Photographer: {photographer}</h2>}
+          {photographer && !isDetailed && (
+            <h2 className={styles.title}>Photographer: {photographer}</h2>
+          )}
 
           {isDetailed && (
             <>

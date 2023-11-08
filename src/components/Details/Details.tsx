@@ -53,7 +53,9 @@ const Details: React.FC = () => {
   return (
     <aside className={styles.root}>
       <div className={styles.container}>
-        <Button onClick={handleCloseDetails}>Close</Button>
+        <Button className={styles.close} onClick={handleCloseDetails}>
+          Close
+        </Button>
         <Card {...details} isDetailed={true} />
       </div>
     </aside>
