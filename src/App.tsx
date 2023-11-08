@@ -1,7 +1,7 @@
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { ErrorBoundary } from './components/ErrorBoundary';
-import { AppRoutes } from './routes';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { AppRoutes } from '@/routes';
 
 const App: React.FC = () => (
   <ErrorBoundary>

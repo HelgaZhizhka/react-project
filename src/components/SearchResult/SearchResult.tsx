@@ -1,5 +1,5 @@
-import { Photo } from '../../utils/interfaces';
-import { Card } from '../Card';
+import { Photo } from '@/utils/interfaces';
+import { Card } from '@/components/Card';
 import styles from './SearchResult.module.scss';
 
 interface Props {

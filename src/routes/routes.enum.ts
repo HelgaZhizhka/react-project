@@ -1,5 +1,5 @@
 export enum RoutePaths {
   HOME = '/',
-  DETAILS = 'details/:id',
+  DETAILS = 'details',
   ERROR = '*',
 }

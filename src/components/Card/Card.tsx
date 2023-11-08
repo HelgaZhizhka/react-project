@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { Photo } from '../../utils/interfaces';
-import { Spinner } from '../Spinner';
+import { Photo } from '@/utils/interfaces';
+import { Spinner } from '@/components/Spinner';
 import styles from './Card.module.scss';
 
 interface Props extends Photo {
@@ -47,11 +47,15 @@ const Card: React.FC<Props> = ({
         <Spinner />
       ) : (
         <div className={styles.content}>
-          {alt && <p className={styles.description}>{alt}</p>}
-          {photographer && isDetailed && (
-            <a href={photographer_url} target="_blank" rel="noopener noreferrer">
-              <h2 className={styles.title}>{photographer}</h2>
-            </a>
+          {photographer && <h2 className={styles.title}>Photographer: {photographer}</h2>}
+
+          {isDetailed && (
+            <>
+              {alt && <p className={styles.description}>{alt}</p>}
+              <a href={photographer_url} target="_blank" rel="noopener noreferrer">
+                <h2 className={styles.title}>{photographer}</h2>
+              </a>
+            </>
           )}
         </div>
       )}

@@ -1,7 +1,7 @@
 import { Component, ErrorInfo } from 'react';
 
+import { Button } from '@/components/Button';
 import styles from './ErrorBoundary.module.scss';
-import { Button } from '../Button';
 
 interface State {
   hasError: boolean;

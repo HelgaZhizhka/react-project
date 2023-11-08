@@ -1,5 +1,5 @@
-import { PER_PAGE } from '../components/Select/Select.enums';
-import { ApiError, Photo } from '../utils/interfaces';
+import { PER_PAGE } from '@/components/Select/Select.enums';
+import { ApiError, Photo } from '@/utils/interfaces';
 
 export interface SearchResponse {
   page: number;

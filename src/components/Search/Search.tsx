@@ -1,5 +1,5 @@
-import { SearchInput } from '../SearchInput';
-import { Button } from '../Button';
+import { SearchInput } from '@/components/SearchInput';
+import { Button } from '@/components/Button';
 import styles from './Search.module.scss';
 
 interface Props {

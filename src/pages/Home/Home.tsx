@@ -1,18 +1,19 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Outlet, useSearchParams } from 'react-router-dom';
+import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { apiGetPopularity, apiSearch } from '../../api';
-import { Photo } from '../../utils/interfaces';
-import { Status } from '../../utils/types';
-import { hasErrorMessage } from '../../utils/functions';
-import { Search } from '../../components/Search';
-import { SearchResult } from '../../components/SearchResult';
-import { Spinner } from '../../components/Spinner';
-import { NotFound } from '../../components/NotFound';
-import { Pagination } from '../../components/Pagination';
-import { Select } from '../../components/Select';
-import { PER_PAGE } from '../../components/Select/Select.enums';
+import { apiGetPopularity, apiSearch } from '@/api';
+import { Photo } from '@/utils/interfaces';
+import { Status } from '@/utils/types';
+import { hasErrorMessage } from '@/utils/functions';
+import { Search } from '@/components/Search';
+import { SearchResult } from '@/components/SearchResult';
+import { Spinner } from '@/components/Spinner';
+import { NotFound } from '@/components/NotFound';
+import { Pagination } from '@/components/Pagination';
+import { Select } from '@/components/Select';
+import { PER_PAGE } from '@/components/Select/Select.enums';
 import styles from './Home.module.scss';
+import { RoutePaths } from '@/routes/routes.enum';
 
 const Home: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>(localStorage.getItem('searchValue') || '');
@@ -23,20 +24,24 @@ const Home: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [totalResults, setTotalResults] = useState<number>(0);
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
+  const navigate = useNavigate();
 
   const handlePerPageChange = (newPerPage: number) => {
     setPerPage(newPerPage);
-    setSearchParams({ page: '1', per_page: newPerPage.toString() });
+    navigate(RoutePaths.HOME);
+    setSearchParams({ page: '1' }, { replace: true });
   };
 
   const handlePageChange = (newPage: number) => {
-    setSearchParams({ page: newPage.toString(), per_page: perPage.toString() });
+    navigate(RoutePaths.HOME);
+    setSearchParams({ page: newPage.toString() }, { replace: true });
   };
 
   const handleInputChange = useCallback((newValue: string): void => {
     setSearchValue(newValue);
-    setSearchParams({ page: '1', per_page: perPage.toString() });
+    setSearchParams({ page: '1' });
     localStorage.setItem('searchValue', newValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const resetSearchResults = (): void => {
@@ -62,8 +67,7 @@ const Home: React.FC = () => {
   };
 
   const handleItemClick = (id: number) => {
-    searchParams.set('details', id.toString());
-    setSearchParams(searchParams);
+    navigate(`${RoutePaths.DETAILS}?id=${id}&page=${currentPage}`);
   };
 
   const renderContent = () => {
@@ -83,26 +87,23 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const page = parseInt(searchParams.get('page') || '1', 10);
-    const perPageFromURL = parseInt(searchParams.get('per_page') || `${PER_PAGE[10]}`, 10);
+    const id = searchParams.get('id');
 
-    if (searchParams.get('details')) {
+    if (id) {
       return;
     }
 
-    if (perPageFromURL !== perPage) {
-      setPerPage(perPageFromURL);
-    }
-
     handleSearch(page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   return (
     <div className="container">
+      <Outlet />
+
       <Search value={searchValue} onInputChange={handleInputChange} onSearch={handleSearch} />
-      <div className={styles.wrapper}>
-        <div className={styles.section}>{renderContent()}</div>
-        <Outlet />
-      </div>
+
+      <div className={styles.section}>{renderContent()}</div>
 
       <div className={styles.footer}>
         <Select value={perPage} onChange={handlePerPageChange} />

@@ -1,4 +1,16 @@
 .root {
-  padding: 20px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 300px;
+  overflow-y: auto;
+  z-index: 100;
 }
 
+.container {
+  min-height: 100%;
+  padding: 20px;
+  background-color: var(--component-bg);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}

@@ -1,4 +1,4 @@
-import { SIZE, SPINNER_VARIANT } from '../../utils/types';
+import { SIZE, SPINNER_VARIANT } from '@/utils/types';
 import styles from './Spinner.module.scss';
 
 interface Props {

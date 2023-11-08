@@ -1,26 +1,32 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
-import { apiGetPhoto } from '../../api/api';
-import { Photo } from '../../utils/interfaces';
-import { Spinner } from '../Spinner';
-import { Button } from '../Button';
-import { Card } from '../Card';
+import { apiGetPhoto } from '@/api/api';
+import { Photo } from '@/utils/interfaces';
+import { RoutePaths } from '@/routes/routes.enum';
+import { Spinner } from '@/components/Spinner';
+import { Button } from '@/components/Button';
+import { Card } from '@/components/Card';
 import styles from './Details.module.scss';
 
 const Details: React.FC = () => {
   const [details, setDetails] = useState<Photo | null>(null);
   const [loading, setLoading] = useState(false);
-  const { id } = useParams();
-
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get('id');
   const navigate = useNavigate();
 
   const handleCloseDetails = () => {
     setDetails(null);
-    navigate('/');
+    const page = searchParams.get('page');
+    navigate(`${RoutePaths.HOME}?page=${page}`);
   };
 
   useEffect(() => {
+    if (!id) {
+      return;
+    }
+
     const fetchDetails = async (id: number) => {
       try {
         setLoading(true);
@@ -33,10 +39,7 @@ const Details: React.FC = () => {
       }
     };
 
-    const detailsId = Number(id);
-    if (detailsId) {
-      fetchDetails(detailsId);
-    }
+    fetchDetails(Number(id));
   }, [id]);
 
   if (loading) {
@@ -48,12 +51,12 @@ const Details: React.FC = () => {
   }
 
   return (
-    <div className="container">
-      <Button onClick={handleCloseDetails}>Close</Button>
-      <div className={styles.root}>
+    <aside className={styles.root}>
+      <div className={styles.container}>
+        <Button onClick={handleCloseDetails}>Close</Button>
         <Card {...details} isDetailed={true} />
       </div>
-    </div>
+    </aside>
   );
 };
 
