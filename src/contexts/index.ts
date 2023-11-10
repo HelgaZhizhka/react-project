@@ -1,2 +1,2 @@
 export { default as SearchResultContext } from './SearchResultContext';
-export { default as SearchValueContext } from './SearchValueContext';
+export { default as SearchQueryContext } from './SearchQueryContext';

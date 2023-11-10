@@ -1,16 +1,20 @@
+import { useContext } from 'react';
+
 import { Photo } from '@/utils/interfaces';
 import { Card } from '@/components/Card';
 import styles from './SearchResult.module.scss';
+import { SearchResultContext } from '@/contexts';
 
-interface Props {
-  results: Photo[];
-  onItemClick: (id: number) => void;
-}
+const SearchResult: React.FC = () => {
+  const { searchResult, onItemClick } = useContext(SearchResultContext);
 
-const SearchResult: React.FC<Props> = ({ results, onItemClick }) => {
+  if (!searchResult) {
+    return null;
+  }
+
   return (
     <div className={styles.root}>
-      {results.map((item: Photo) => (
+      {searchResult.map((item: Photo) => (
         <Card key={item.id} {...item} onItemClick={() => onItemClick(item.id)} />
       ))}
     </div>

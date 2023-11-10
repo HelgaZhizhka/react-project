@@ -2,9 +2,11 @@ import { useState, useEffect, useCallback } from 'react';
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { apiGetPopularity, apiSearch } from '@/api';
+import { SearchQueryContext, SearchResultContext } from '@/contexts';
 import { Photo } from '@/utils/interfaces';
 import { Status } from '@/utils/types';
 import { hasErrorMessage } from '@/utils/functions';
+import { RoutePaths } from '@/routes/routes.enum';
 import { Search } from '@/components/Search';
 import { SearchResult } from '@/components/SearchResult';
 import { Spinner } from '@/components/Spinner';
@@ -13,11 +15,10 @@ import { Pagination } from '@/components/Pagination';
 import { Select } from '@/components/Select';
 import { PER_PAGE } from '@/components/Select/Select.enums';
 import styles from './Home.module.scss';
-import { RoutePaths } from '@/routes/routes.enum';
 
 const Home: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>(localStorage.getItem('searchValue') || '');
-  const [searchResults, setSearchResults] = useState<Photo[]>([]);
+  const [searchResult, setSearchResult] = useState<Photo[]>([]);
   const [status, setStatus] = useState<Status>('loading');
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [error, setError] = useState<string>('');
@@ -65,20 +66,20 @@ const Home: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const resetSearchResults = (): void => {
+  const resetSearchResult = (): void => {
     setStatus('loading');
-    setSearchResults([]);
+    setSearchResult([]);
   };
 
   const handleSearch = async (page: number = 1): Promise<void> => {
-    resetSearchResults();
+    resetSearchResult();
 
     try {
       const data = searchValue.trim()
         ? await apiSearch(searchValue.trim(), page, perPage)
         : await apiGetPopularity(page, perPage);
 
-      setSearchResults(data.photos);
+      setSearchResult(data.photos);
       setTotalResults(data.total_results);
       setStatus(data.photos.length ? 'success' : 'empty');
     } catch (error: unknown) {
@@ -97,7 +98,13 @@ const Home: React.FC = () => {
       case 'loading':
         return <Spinner size="large" variant="global" />;
       case 'success':
-        return <SearchResult results={searchResults} onItemClick={handleItemClick} />;
+        return (
+          <SearchResultContext.Provider
+            value={{ searchResult: searchResult, onItemClick: handleItemClick }}
+          >
+            <SearchResult />
+          </SearchResultContext.Provider>
+        );
       case 'error':
         return <h3 className={styles.error}>{error}. Try again.</h3>;
       case 'empty':
@@ -119,22 +126,24 @@ const Home: React.FC = () => {
   }, [searchParams, isDetailsOpen]);
 
   return (
-    <div className="container">
-      <Outlet />
+    <SearchQueryContext.Provider value={searchValue}>
+      <div className="container">
+        <Outlet />
 
-      <Search value={searchValue} onInputChange={handleInputChange} onSearch={handleSearch} />
+        <Search onInputChange={handleInputChange} onSearch={handleSearch} />
 
-      <div className={styles.section}>{renderContent()}</div>
+        <div className={styles.section}>{renderContent()}</div>
 
-      <div className={styles.footer}>
-        <Select value={perPage} onChange={handlePerPageChange} />
-        <Pagination
-          currentPage={currentPage}
-          totalPages={Math.ceil(totalResults / perPage)}
-          onPageChange={handlePageChange}
-        />
+        <div className={styles.footer}>
+          <Select value={perPage} onChange={handlePerPageChange} />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil(totalResults / perPage)}
+            onPageChange={handlePageChange}
+          />
+        </div>
       </div>
-    </div>
+    </SearchQueryContext.Provider>
   );
 };
 

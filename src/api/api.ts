@@ -1,14 +1,5 @@
 import { PER_PAGE } from '@/components/Select/Select.enums';
-import { ApiError, Photo } from '@/utils/interfaces';
-
-export interface SearchResponse {
-  page: number;
-  per_page: number;
-  photos: Photo[];
-  total_results: number;
-  prev_page?: string;
-  next_page?: string;
-}
+import { ApiError, Photo, SearchResponse } from '@/utils/interfaces';
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 const API_URL = import.meta.env.VITE_API_URL;

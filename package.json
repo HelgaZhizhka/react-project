@@ -43,15 +43,16 @@
     "husky": "^8.0.0",
     "jsdom": "^22.1.0",
     "lint-staged": "^14.0.1",
+    "msw": "^2.0.5",
     "prettier": "^3.0.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "sass": "^1.69.4",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "vitest": "^0.34.6"
   },
   "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-router-dom": "^6.18.0"
   }
 }

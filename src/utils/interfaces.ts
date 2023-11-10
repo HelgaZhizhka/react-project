@@ -20,6 +20,15 @@ export interface Photo {
   alt: string;
 }
 
+export interface SearchResponse {
+  page: number;
+  per_page: number;
+  photos: Photo[];
+  total_results: number;
+  prev_page?: string;
+  next_page?: string;
+}
+
 export interface ApiError {
   message: string;
   status?: number;

@@ -1,17 +1,14 @@
+import { Photo } from '@/utils/interfaces';
 import { createContext } from 'react';
 
 type ContextType = {
-  cardId: number;
-  currentPage: number;
-  perPage: number;
-  isDetails: boolean;
+  searchResult: Photo[] | null;
+  onItemClick: (id: number) => void;
 };
 
 const SearchResultContext = createContext<ContextType>({
-  cardId: 0,
-  currentPage: 0,
-  perPage: 0,
-  isDetails: false,
+  searchResult: null,
+  onItemClick: () => {},
 });
 
 export default SearchResultContext;
