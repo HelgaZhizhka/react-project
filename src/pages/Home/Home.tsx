@@ -22,25 +22,45 @@ const Home: React.FC = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [error, setError] = useState<string>('');
   const [perPage, setPerPage] = useState<number>(PER_PAGE[10]);
-  const [searchParams, setSearchParams] = useSearchParams();
   const [totalResults, setTotalResults] = useState<number>(0);
+  const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const navigate = useNavigate();
 
   const handlePerPageChange = (newPerPage: number) => {
     setPerPage(newPerPage);
-    navigate(RoutePaths.HOME);
-    setSearchParams({ page: '1' }, { replace: true });
+
+    if (isDetailsOpen) {
+      setIsDetailsOpen(false);
+      navigate({
+        pathname: RoutePaths.HOME,
+        search: `?page=1`,
+      });
+    } else {
+      setSearchParams({ page: '1' });
+    }
   };
 
   const handlePageChange = (newPage: number) => {
-    navigate(RoutePaths.HOME);
-    setSearchParams({ page: newPage.toString() }, { replace: true });
+    if (isDetailsOpen) {
+      setIsDetailsOpen(false);
+      navigate({
+        pathname: RoutePaths.HOME,
+        search: `?page=${newPage.toString()}`,
+      });
+    } else {
+      setSearchParams({ page: newPage.toString() });
+    }
   };
 
   const handleInputChange = useCallback((newValue: string): void => {
     setSearchValue(newValue);
-    setSearchParams({ page: '1' });
+
+    if (isDetailsOpen) {
+      setIsDetailsOpen(false);
+    }
+
+    setSearchParams({ page: '1' }, { replace: true });
     localStorage.setItem('searchValue', newValue);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

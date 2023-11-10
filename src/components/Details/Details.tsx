@@ -19,7 +19,7 @@ const Details: React.FC = () => {
   const handleCloseDetails = () => {
     setDetails(null);
     const page = searchParams.get('page');
-    navigate(`${RoutePaths.HOME}?page=${page}`);
+    navigate(`${RoutePaths.HOME}?page=${page}`, { replace: true });
   };
 
   useEffect(() => {
