@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { apiGetPopularity, apiSearch } from '@/api';
 import { SearchQueryContext, SearchResultContext } from '@/contexts';
@@ -20,19 +20,19 @@ const Home: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>(localStorage.getItem('searchValue') || '');
   const [searchResult, setSearchResult] = useState<Photo[]>([]);
   const [status, setStatus] = useState<Status>('loading');
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [error, setError] = useState<string>('');
   const [perPage, setPerPage] = useState<number>(PER_PAGE[10]);
   const [totalResults, setTotalResults] = useState<number>(0);
   const [searchParams, setSearchParams] = useSearchParams();
+  const params = useParams();
+  const id = params.id;
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const navigate = useNavigate();
 
   const handlePerPageChange = (newPerPage: number) => {
     setPerPage(newPerPage);
 
-    if (isDetailsOpen) {
-      setIsDetailsOpen(false);
+    if (id) {
       navigate({
         pathname: RoutePaths.HOME,
         search: `?page=1`,
@@ -43,8 +43,7 @@ const Home: React.FC = () => {
   };
 
   const handlePageChange = (newPage: number) => {
-    if (isDetailsOpen) {
-      setIsDetailsOpen(false);
+    if (id) {
       navigate({
         pathname: RoutePaths.HOME,
         search: `?page=${newPage.toString()}`,
@@ -54,17 +53,21 @@ const Home: React.FC = () => {
     }
   };
 
-  const handleInputChange = useCallback((newValue: string): void => {
-    setSearchValue(newValue);
+  const handleInputChange = useCallback(
+    (newValue: string): void => {
+      if (id) {
+        navigate({
+          pathname: RoutePaths.HOME,
+        });
+      }
 
-    if (isDetailsOpen) {
-      setIsDetailsOpen(false);
-    }
+      setSearchValue(newValue);
+      setSearchParams({ page: '1' }, { replace: true });
 
-    setSearchParams({ page: '1' }, { replace: true });
-    localStorage.setItem('searchValue', newValue);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      localStorage.setItem('searchValue', newValue);
+    },
+    [id, navigate, setSearchParams]
+  );
 
   const resetSearchResult = (): void => {
     setStatus('loading');
@@ -88,11 +91,6 @@ const Home: React.FC = () => {
     }
   };
 
-  const handleItemClick = (id: number) => {
-    setIsDetailsOpen(true);
-    navigate(`${RoutePaths.DETAILS}?id=${id}&page=${currentPage}`);
-  };
-
   const renderContent = () => {
     switch (status) {
       case 'loading':
@@ -100,7 +98,7 @@ const Home: React.FC = () => {
       case 'success':
         return (
           <SearchResultContext.Provider
-            value={{ searchResult: searchResult, onItemClick: handleItemClick }}
+            value={{ searchResult: searchResult, currentPage: currentPage }}
           >
             <SearchResult />
           </SearchResultContext.Provider>
@@ -117,23 +115,22 @@ const Home: React.FC = () => {
   useEffect(() => {
     const page = parseInt(searchParams.get('page') || '1', 10);
 
-    if (isDetailsOpen) {
+    if (id) {
       return;
     }
 
     handleSearch(page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, isDetailsOpen]);
+  }, [searchParams]);
 
   return (
-    <SearchQueryContext.Provider value={searchValue}>
+    <div className={`${styles.root} ${id ? styles.isDetailed : ''}`}>
+      <Outlet />
       <div className="container">
-        <Outlet />
-
-        <Search onInputChange={handleInputChange} onSearch={handleSearch} />
-
+        <SearchQueryContext.Provider value={searchValue}>
+          <Search onInputChange={handleInputChange} onSearch={handleSearch} />
+        </SearchQueryContext.Provider>
         <div className={styles.section}>{renderContent()}</div>
-
         <div className={styles.footer}>
           <Select value={perPage} onChange={handlePerPageChange} />
           <Pagination
@@ -143,7 +140,7 @@ const Home: React.FC = () => {
           />
         </div>
       </div>
-    </SearchQueryContext.Provider>
+    </div>
   );
 };
 

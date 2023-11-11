@@ -3,12 +3,12 @@ import { createContext } from 'react';
 
 type ContextType = {
   searchResult: Photo[] | null;
-  onItemClick: (id: number) => void;
+  currentPage: number;
 };
 
 const SearchResultContext = createContext<ContextType>({
   searchResult: null,
-  onItemClick: () => {},
+  currentPage: 1,
 });
 
 export default SearchResultContext;

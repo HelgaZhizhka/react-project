@@ -5,7 +5,6 @@ import { Spinner } from '@/components/Spinner';
 import styles from './Card.module.scss';
 
 interface Props extends Photo {
-  onItemClick?: () => void;
   isDetailed?: boolean;
 }
 
@@ -15,7 +14,6 @@ const Card: React.FC<Props> = ({
   avg_color,
   photographer,
   photographer_url,
-  onItemClick,
   isDetailed = false,
 }) => {
   const [loading, setLoading] = useState(true);
@@ -29,10 +27,7 @@ const Card: React.FC<Props> = ({
   };
 
   return (
-    <div
-      className={`${styles.root} ${isDetailed ? styles.detailed : ''}`}
-      onClick={() => onItemClick && onItemClick()}
-    >
+    <div className={`${styles.root} ${isDetailed ? styles.detailed : ''}`}>
       <div className={styles.wrapper} style={{ backgroundColor: avg_color }}>
         <img
           className={`${styles.image} ${loading ? styles.hidden : ''}`}

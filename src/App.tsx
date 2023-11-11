@@ -1,15 +1,9 @@
-import { BrowserRouter as Router } from 'react-router-dom';
-
-import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { AppRoutes } from '@/routes';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 const App: React.FC = () => (
   <ErrorBoundary>
-    <>
-      <Router>
-        <AppRoutes />
-      </Router>
-    </>
+    <AppRoutes />
   </ErrorBoundary>
 );
 

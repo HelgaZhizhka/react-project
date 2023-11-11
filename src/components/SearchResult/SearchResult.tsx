@@ -1,12 +1,14 @@
 import { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 import { Photo } from '@/utils/interfaces';
 import { Card } from '@/components/Card';
 import styles from './SearchResult.module.scss';
 import { SearchResultContext } from '@/contexts';
+import { RoutePaths } from '@/routes/routes.enum';
 
 const SearchResult: React.FC = () => {
-  const { searchResult, onItemClick } = useContext(SearchResultContext);
+  const { searchResult, currentPage } = useContext(SearchResultContext);
 
   if (!searchResult) {
     return null;
@@ -14,8 +16,10 @@ const SearchResult: React.FC = () => {
 
   return (
     <div className={styles.root}>
-      {searchResult.map((item: Photo) => (
-        <Card key={item.id} {...item} onItemClick={() => onItemClick(item.id)} />
+      {searchResult.map((photo: Photo) => (
+        <Link key={photo.id} to={`${RoutePaths.DETAILS}/${photo.id}?page=${currentPage}`}>
+          <Card {...photo} />
+        </Link>
       ))}
     </div>
   );
