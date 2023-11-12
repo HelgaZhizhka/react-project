@@ -1,0 +1,17 @@
+.root {
+  border: none;
+  border-radius: 3px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: var(--component-bg);
+  color: var(--color-text);
+  transition: all 0.3s ease-in-out;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    color: var(--color-lightgray);
+  }
+}
