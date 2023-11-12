@@ -10,8 +10,8 @@ import { RoutePaths } from '@/routes/routes.enum';
 const SearchResult: React.FC = () => {
   const { searchResult, currentPage } = useContext(SearchResultContext);
 
-  if (!searchResult) {
-    return null;
+  if (!searchResult?.length) {
+    return <div>No cards available</div>;
   }
 
   return (
