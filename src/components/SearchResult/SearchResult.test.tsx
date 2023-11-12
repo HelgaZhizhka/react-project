@@ -6,7 +6,7 @@ import { PhotoData } from '@/__tests__/mockData';
 import SearchResult from './SearchResult';
 
 describe('SearchResult testing', () => {
-  test('displays data card in links', async () => {
+  it('displays data card in links', async () => {
     render(
       <BrowserRouter>
         <SearchResultContext.Provider value={{ searchResult: PhotoData, currentPage: 1 }}>
@@ -22,7 +22,7 @@ describe('SearchResult testing', () => {
     });
   });
 
-  test('displays with loading data with src attribute', async () => {
+  it('displays with loading data with src attribute', async () => {
     const photoSrc = PhotoData[0].alt;
 
     render(
@@ -41,7 +41,7 @@ describe('SearchResult testing', () => {
     });
   });
 
-  test('displays a message if no cards are present', async () => {
+  it('displays a message if no cards are present', async () => {
     render(
       <BrowserRouter>
         <SearchResultContext.Provider value={{ searchResult: [], currentPage: 1 }}>
