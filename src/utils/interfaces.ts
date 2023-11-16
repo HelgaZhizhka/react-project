@@ -1,3 +1,5 @@
+import { ViewMode } from '@/components/SearchResult/SearchResult.emum';
+
 export interface Photo {
   id: number;
   width: number;
@@ -32,4 +34,16 @@ export interface SearchResponse {
 export interface ApiError {
   message: string;
   status?: number;
+}
+
+export interface SearchState {
+  query: string;
+}
+
+export interface ItemsPerPageState {
+  value: number;
+}
+
+export interface ViewModeState {
+  mode: ViewMode;
 }

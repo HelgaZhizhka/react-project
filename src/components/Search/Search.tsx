@@ -1,24 +1,24 @@
-import { useContext } from 'react';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 
-import { SearchQueryContext } from '@/contexts';
+import { setSearchQuery } from '@/features/search/searchSlice';
 import { SearchInput } from '@/components/SearchInput';
 import { Button } from '@/components/Button';
 import styles from './Search.module.scss';
 
 interface Props {
-  onInputChange: (value: string) => void;
   onSearch: () => void;
 }
 
-const Search: React.FC<Props> = ({ onInputChange, onSearch }) => {
-  const searchQuery = useContext(SearchQueryContext);
+const Search: React.FC<Props> = ({ onSearch }) => {
+  const dispatch = useAppDispatch();
+  const searchQuery = useAppSelector((state) => state.search.query);
 
   const handleInputChange = (value: string) => {
-    onInputChange(value);
+    dispatch(setSearchQuery(value));
   };
 
   const handleKeyDown = (value: string) => {
-    onInputChange(value);
+    dispatch(setSearchQuery(value));
     onSearch();
   };
 

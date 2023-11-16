@@ -1,21 +1,13 @@
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter, Routes, Route } from 'react-router-dom';
-
-import NotFoundPage from './NotFoundPage';
+import { RouterProvider } from 'react-router-dom';
+import { createTestRouter } from '@/__tests__/testRouter';
 
 describe('NotFoundPage Component', () => {
-  test('displays when navigating to an invalid route', () => {
-    render(
-      <MemoryRouter initialEntries={['/some/non-existent/route']}>
-        <Routes>
-          <Route path="/" element={<h1>Home Page</h1>} />
-          <Route path="details/:id" element={<h1>Details Page</h1>} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </MemoryRouter>
-    );
+  it('displays when navigating to an invalid route', () => {
+    const router = createTestRouter(['/some/non-existent/route']);
 
-    expect(screen.getByText('404')).toBeInTheDocument();
+    render(<RouterProvider router={router} />);
+
     expect(screen.getByText("Sorry, there's nothing here 🥲")).toBeInTheDocument();
     expect(screen.getByText('Go to home page')).toBeInTheDocument();
   });
