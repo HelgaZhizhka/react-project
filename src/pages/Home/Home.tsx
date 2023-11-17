@@ -1,8 +1,9 @@
-import { useEffect, useCallback } from 'react';
-import { Outlet, useSearchParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, useSearchParams, useParams, useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { hasErrorMessage } from '@/utils/functions';
+import { RoutePaths } from '@/routes/routes.enum';
 import { setSearchQuery } from '@/features/search/searchSlice';
 import { setCurrentPage, setTotalPages } from '@/features/pagination/paginationSlice';
 import { setItemsPerPage } from '@/features/itemsPerPage/itemsPerPageSlice';
@@ -22,7 +23,8 @@ const Home: React.FC = () => {
   const currentPage = useAppSelector((state) => state.pagination.currentPage);
   const perPage = useAppSelector((state) => state.itemsPerPage.value);
   const [searchParams, setSearchParams] = useSearchParams();
-  const id = searchParams.get('id');
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
   const searchResult = useSearchPhotosQuery(
     { query: searchValue, page: currentPage, perPage },
@@ -41,39 +43,65 @@ const Home: React.FC = () => {
   const error = searchResult.error || popularityResult.error;
 
   const navigateToFirstPage = () => {
-    setSearchParams({ page: '1' });
+    searchParams.set('page', '1');
+
+    if (searchValue) {
+      searchParams.set('query', searchValue);
+    }
+
+    setSearchParams(searchParams);
+
     dispatch(setCurrentPage(1));
   };
 
-  const handleInputChange = useCallback(
-    (newValue: string) => {
+  const navigateToDetailsPage = (id: number) => {
+    navigate(`${RoutePaths.DETAILS}/${id}?page=${currentPage}`);
+  };
+
+  const handleSearch = (newValue: string) => {
+    const currentQuery = searchParams.get('query');
+
+    if (newValue !== currentQuery) {
+      setSearchParams({ query: newValue, page: '1' });
       dispatch(setSearchQuery(newValue));
-      navigateToFirstPage();
-    },
-    [dispatch]
-  );
+    }
+  };
 
-  const handlePageChange = useCallback(
-    (newValue: number) => {
-      dispatch(setCurrentPage(newValue));
-      setSearchParams({ page: newValue.toString() });
-    },
-    [dispatch]
-  );
+  const handlePageChange = (newValue: number) => {
+    dispatch(setCurrentPage(newValue));
 
-  const handlePerPageChange = useCallback(
-    (newValue: number) => {
-      dispatch(setItemsPerPage(newValue));
-      navigateToFirstPage();
-    },
-    [dispatch]
-  );
+    searchParams.set('page', newValue.toString());
+
+    if (searchValue) {
+      searchParams.set('query', searchValue);
+    }
+
+    setSearchParams(searchParams);
+  };
+
+  const handlePerPageChange = (newValue: number) => {
+    dispatch(setItemsPerPage(newValue));
+    navigateToFirstPage();
+  };
+
+  useEffect(() => {
+    const queryFromURL = searchParams.get('query') || '';
+    const pageFromURL = parseInt(searchParams.get('page') || '1', 10);
+
+    if (queryFromURL !== searchValue) {
+      dispatch(setSearchQuery(queryFromURL));
+    }
+
+    if (pageFromURL !== currentPage) {
+      dispatch(setCurrentPage(pageFromURL));
+    }
+  }, [searchParams, dispatch]);
 
   useEffect(() => {
     if (typeof totalResults === 'number' && perPage > 0) {
       dispatch(setTotalPages(Math.ceil(totalResults / perPage)));
     }
-  }, [totalResults]);
+  }, [totalResults, perPage, dispatch]);
 
   const renderContent = () => {
     if (isLoading) return <Spinner size="large" variant="global" />;
@@ -85,14 +113,14 @@ const Home: React.FC = () => {
 
     if (!photos?.length) return <NotFound />;
 
-    return <SearchResult searchResult={photos} currentPage={currentPage} />;
+    return <SearchResult searchResult={photos} onClickCard={navigateToDetailsPage} />;
   };
 
   return (
     <div className={`${styles.root} ${id ? styles.isDetailed : ''}`}>
       <Outlet />
       <div className="container">
-        <Search onInputChange={handleInputChange} />
+        <Search onSearch={handleSearch} />
         <div className={styles.section}>{renderContent()}</div>
         <div className={styles.footer}>
           <Select value={perPage} onChange={handlePerPageChange} />

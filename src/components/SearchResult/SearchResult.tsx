@@ -4,14 +4,14 @@ import styles from './SearchResult.module.scss';
 
 interface Props {
   searchResult: Photo[];
-  currentPage: number;
+  onClickCard: (id: number) => void;
 }
 
-const SearchResult: React.FC<Props> = ({ searchResult, currentPage }) => {
+const SearchResult: React.FC<Props> = ({ searchResult, onClickCard }) => {
   return (
     <div className={styles.root}>
       {searchResult.map((photo: Photo) => (
-        <Card key={photo.id} {...photo} currentPage={currentPage} />
+        <Card key={photo.id} {...photo} onClickCard={onClickCard} />
       ))}
     </div>
   );

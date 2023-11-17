@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 
 import { setSearchQuery } from '@/features/search/searchSlice';
@@ -6,32 +7,33 @@ import { Button } from '@/components/Button';
 import styles from './Search.module.scss';
 
 interface Props {
-  onInputChange: (newValue: string) => void;
+  onSearch: (newValue: string) => void;
 }
 
-const Search: React.FC<Props> = ({ onInputChange }) => {
+const Search: React.FC<Props> = ({ onSearch }) => {
   const dispatch = useAppDispatch();
   const searchQuery = useAppSelector((state) => state.search.query);
+  const [query, setQuery] = useState(searchQuery);
 
   const handleInputChange = (value: string) => {
-    dispatch(setSearchQuery(value));
+    setQuery(value);
   };
 
   const handleKeyDown = (value: string) => {
     dispatch(setSearchQuery(value));
-    onInputChange(value);
+    onSearch(value);
   };
 
   return (
     <div className={styles.root}>
       <SearchInput
         className={styles.input}
-        value={searchQuery}
+        value={query}
         onChange={handleInputChange}
         handleKeyDown={handleKeyDown}
         placeholder="Search..."
       />
-      <Button onClick={() => onInputChange(searchQuery)}>Search</Button>
+      <Button onClick={() => onSearch(searchQuery)}>Search</Button>
     </div>
   );
 };
