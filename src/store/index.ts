@@ -1,13 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import { apiService } from '@/api/apiService';
 import searchReducer from '@/features/search/searchSlice';
 import itemsPerPageReducer from '@/features/itemsPerPage/itemsPerPageSlice';
+import paginationSliceReducer from '@/features/pagination/paginationSlice';
 
 const store = configureStore({
   reducer: {
     search: searchReducer,
     itemsPerPage: itemsPerPageReducer,
+    pagination: paginationSliceReducer,
+    [apiService.reducerPath]: apiService.reducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiService.middleware),
 });
 
 export default store;

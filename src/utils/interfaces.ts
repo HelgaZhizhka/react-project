@@ -47,3 +47,8 @@ export interface ItemsPerPageState {
 export interface ViewModeState {
   mode: ViewMode;
 }
+
+export interface PaginationState {
+  currentPage: number;
+  totalPages: number;
+}

@@ -1,143 +1,102 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useEffect, useCallback } from 'react';
+import { Outlet, useSearchParams } from 'react-router-dom';
 
-import { apiGetPopularity, apiSearch } from '@/api';
-import { SearchQueryContext, SearchResultContext } from '@/contexts';
-import { Photo } from '@/utils/interfaces';
-import { Status } from '@/utils/types';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { hasErrorMessage } from '@/utils/functions';
-import { RoutePaths } from '@/routes/routes.enum';
+import { setSearchQuery } from '@/features/search/searchSlice';
+import { setCurrentPage, setTotalPages } from '@/features/pagination/paginationSlice';
+import { setItemsPerPage } from '@/features/itemsPerPage/itemsPerPageSlice';
+import { useSearchPhotosQuery, useGetPopularityQuery } from '@/api/apiService';
 import { Search } from '@/components/Search';
 import { SearchResult } from '@/components/SearchResult';
 import { Spinner } from '@/components/Spinner';
 import { NotFound } from '@/components/NotFound';
 import { Pagination } from '@/components/Pagination';
 import { Select } from '@/components/Select';
-import { PER_PAGE } from '@/components/Select/Select.enums';
 import styles from './Home.module.scss';
 
 const Home: React.FC = () => {
-  const [searchValue, setSearchValue] = useState<string>(localStorage.getItem('searchValue') || '');
-  const [searchResult, setSearchResult] = useState<Photo[]>([]);
-  const [status, setStatus] = useState<Status>('loading');
-  const [error, setError] = useState<string>('');
-  const [perPage, setPerPage] = useState<number>(PER_PAGE[10]);
-  const [totalResults, setTotalResults] = useState<number>(0);
+  console.log('Home component is rendering');
+  const dispatch = useAppDispatch();
+  const searchValue = useAppSelector((state) => state.search.query);
+  const currentPage = useAppSelector((state) => state.pagination.currentPage);
+  const perPage = useAppSelector((state) => state.itemsPerPage.value);
   const [searchParams, setSearchParams] = useSearchParams();
-  const params = useParams();
-  const id = params.id;
-  const currentPage = parseInt(searchParams.get('page') || '1', 10);
-  const navigate = useNavigate();
+  const id = searchParams.get('id');
 
-  const handlePerPageChange = (newPerPage: number) => {
-    setPerPage(newPerPage);
+  const searchResult = useSearchPhotosQuery(
+    { query: searchValue, page: currentPage, perPage },
+    { skip: !searchValue.trim() }
+  );
+  const popularityResult = useGetPopularityQuery(
+    { page: currentPage, perPage },
+    { skip: !!searchValue.trim() }
+  );
 
-    if (id) {
-      navigate({
-        pathname: RoutePaths.HOME,
-        search: `?page=1`,
-      });
-    } else {
-      setSearchParams({ page: '1' });
-    }
-  };
+  const photos = searchValue.trim() ? searchResult.data?.photos : popularityResult.data?.photos;
+  const totalResults = searchValue.trim()
+    ? searchResult.data?.total_results
+    : popularityResult.data?.total_results;
+  const isLoading = searchResult.isLoading || popularityResult.isLoading;
+  const error = searchResult.error || popularityResult.error;
 
-  const handlePageChange = (newPage: number) => {
-    if (id) {
-      navigate({
-        pathname: RoutePaths.HOME,
-        search: `?page=${newPage.toString()}`,
-      });
-    } else {
-      setSearchParams({ page: newPage.toString() });
-    }
+  const navigateToFirstPage = () => {
+    setSearchParams({ page: '1' });
+    dispatch(setCurrentPage(1));
   };
 
   const handleInputChange = useCallback(
-    (newValue: string): void => {
-      if (id) {
-        navigate({
-          pathname: RoutePaths.HOME,
-        });
-      }
-
-      setSearchValue(newValue);
-      setSearchParams({ page: '1' }, { replace: true });
-
-      localStorage.setItem('searchValue', newValue);
+    (newValue: string) => {
+      dispatch(setSearchQuery(newValue));
+      navigateToFirstPage();
     },
-    [id, navigate, setSearchParams]
+    [dispatch]
   );
 
-  const resetSearchResult = (): void => {
-    setStatus('loading');
-    setSearchResult([]);
-  };
+  const handlePageChange = useCallback(
+    (newValue: number) => {
+      dispatch(setCurrentPage(newValue));
+      setSearchParams({ page: newValue.toString() });
+    },
+    [dispatch]
+  );
 
-  const handleSearch = async (page: number = 1): Promise<void> => {
-    resetSearchResult();
-
-    try {
-      const data = searchValue.trim()
-        ? await apiSearch(searchValue.trim(), page, perPage)
-        : await apiGetPopularity(page, perPage);
-
-      setSearchResult(data.photos);
-      setTotalResults(data.total_results);
-      setStatus(data.photos.length ? 'success' : 'empty');
-    } catch (error: unknown) {
-      setStatus('error');
-      setError(hasErrorMessage(error) ? error.message : 'Unknown error.');
-    }
-  };
-
-  const renderContent = () => {
-    switch (status) {
-      case 'loading':
-        return <Spinner size="large" variant="global" />;
-      case 'success':
-        return (
-          <SearchResultContext.Provider
-            value={{ searchResult: searchResult, currentPage: currentPage }}
-          >
-            <SearchResult />
-          </SearchResultContext.Provider>
-        );
-      case 'error':
-        return <h3 className={styles.error}>{error}. Try again.</h3>;
-      case 'empty':
-        return <NotFound />;
-      default:
-        return <p>Oops! Something went unknown...</p>;
-    }
-  };
+  const handlePerPageChange = useCallback(
+    (newValue: number) => {
+      dispatch(setItemsPerPage(newValue));
+      navigateToFirstPage();
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
-    const page = parseInt(searchParams.get('page') || '1', 10);
+    if (typeof totalResults === 'number' && perPage > 0) {
+      dispatch(setTotalPages(Math.ceil(totalResults / perPage)));
+    }
+  }, [totalResults]);
 
-    if (id) {
-      return;
+  const renderContent = () => {
+    if (isLoading) return <Spinner size="large" variant="global" />;
+    if (error) {
+      return (
+        <h3 className={styles.error}>{hasErrorMessage(error) && error.message}. Try again.</h3>
+      );
     }
 
-    handleSearch(page);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+    if (!photos?.length) return <NotFound />;
+
+    return <SearchResult searchResult={photos} currentPage={currentPage} />;
+  };
 
   return (
     <div className={`${styles.root} ${id ? styles.isDetailed : ''}`}>
       <Outlet />
       <div className="container">
-        <SearchQueryContext.Provider value={searchValue}>
-          <Search onInputChange={handleInputChange} onSearch={handleSearch} />
-        </SearchQueryContext.Provider>
+        <Search onInputChange={handleInputChange} />
         <div className={styles.section}>{renderContent()}</div>
         <div className={styles.footer}>
           <Select value={perPage} onChange={handlePerPageChange} />
-          <Pagination
-            currentPage={currentPage}
-            totalPages={Math.ceil(totalResults / perPage)}
-            onPageChange={handlePageChange}
-          />
+          <Pagination onPageChange={handlePageChange} />
         </div>
       </div>
     </div>

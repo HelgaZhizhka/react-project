@@ -1,18 +1,28 @@
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { setCurrentPage } from '@/features/pagination/paginationSlice';
 import styles from './Pagination.module.scss';
 
 interface Props {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
+  onPageChange: (newPage: number) => void;
 }
 
-const Pagination: React.FC<Props> = ({ currentPage, totalPages, onPageChange }) => {
+const Pagination: React.FC<Props> = ({ onPageChange }) => {
+  const dispatch = useAppDispatch();
+  const currentPage = useAppSelector((state) => state.pagination.currentPage);
+  const totalPages = useAppSelector((state) => state.pagination.totalPages);
+
   const handleNextPage = () => {
-    if (currentPage < totalPages) onPageChange(currentPage + 1);
+    if (currentPage < totalPages) {
+      onPageChange(currentPage + 1);
+      dispatch(setCurrentPage(currentPage + 1));
+    }
   };
 
   const handlePrevPage = () => {
-    if (currentPage > 1) onPageChange(currentPage - 1);
+    if (currentPage > 1) {
+      onPageChange(currentPage - 1);
+      dispatch(setCurrentPage(currentPage - 1));
+    }
   };
 
   return (

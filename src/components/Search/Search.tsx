@@ -6,10 +6,10 @@ import { Button } from '@/components/Button';
 import styles from './Search.module.scss';
 
 interface Props {
-  onSearch: () => void;
+  onInputChange: (newValue: string) => void;
 }
 
-const Search: React.FC<Props> = ({ onSearch }) => {
+const Search: React.FC<Props> = ({ onInputChange }) => {
   const dispatch = useAppDispatch();
   const searchQuery = useAppSelector((state) => state.search.query);
 
@@ -19,7 +19,7 @@ const Search: React.FC<Props> = ({ onSearch }) => {
 
   const handleKeyDown = (value: string) => {
     dispatch(setSearchQuery(value));
-    onSearch();
+    onInputChange(value);
   };
 
   return (
@@ -31,7 +31,7 @@ const Search: React.FC<Props> = ({ onSearch }) => {
         handleKeyDown={handleKeyDown}
         placeholder="Search..."
       />
-      <Button onClick={onSearch}>Search</Button>
+      <Button onClick={() => onInputChange(searchQuery)}>Search</Button>
     </div>
   );
 };

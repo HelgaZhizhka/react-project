@@ -1,17 +1,13 @@
-import { useContext } from 'react';
-
 import { Photo } from '@/utils/interfaces';
-import { SearchResultContext } from '@/contexts';
 import { Card } from '@/components/Card';
 import styles from './SearchResult.module.scss';
 
-const SearchResult: React.FC = () => {
-  const { searchResult, currentPage } = useContext(SearchResultContext);
+interface Props {
+  searchResult: Photo[];
+  currentPage: number;
+}
 
-  if (!searchResult?.length) {
-    return <div>No cards available</div>;
-  }
-
+const SearchResult: React.FC<Props> = ({ searchResult, currentPage }) => {
   return (
     <div className={styles.root}>
       {searchResult.map((photo: Photo) => (
