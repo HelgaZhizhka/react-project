@@ -27,9 +27,9 @@ const Details: React.FC = () => {
 
   const handleCloseDetails = () => {
     if (searchValue) {
-      navigate(`${RoutePaths.DETAILS}/${id}?query=${searchValue}&page=${currentPage}`);
+      navigate(`${RoutePaths.HOME}?query=${searchValue}&page=${currentPage}`, { replace: true });
     } else {
-      navigate(`${RoutePaths.DETAILS}/${id}?page=${currentPage}`);
+      navigate(`${RoutePaths.HOME}?page=${currentPage}`, { replace: true });
     }
   };
 
