@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { RouterProvider } from 'react-router-dom';
-import { createTestRouter } from '@/__tests__/testRouter';
+import { createTestRouter } from '@/__tests__/testUtils';
 
 describe('NotFoundPage Component', () => {
   it('displays when navigating to an invalid route', () => {

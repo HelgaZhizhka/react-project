@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useAppSelector } from '@/hooks';
 
-import { setSearchQuery } from '@/features/search/searchSlice';
 import { SearchInput } from '@/components/SearchInput';
 import { Button } from '@/components/Button';
 import styles from './Search.module.scss';
@@ -11,7 +10,6 @@ interface Props {
 }
 
 const Search: React.FC<Props> = ({ onSearch }) => {
-  const dispatch = useAppDispatch();
   const searchQuery = useAppSelector((state) => state.search.query);
   const [query, setQuery] = useState(searchQuery);
 
@@ -19,9 +17,9 @@ const Search: React.FC<Props> = ({ onSearch }) => {
     setQuery(value);
   };
 
-  const handleKeyDown = (value: string) => {
-    dispatch(setSearchQuery(value));
+  const handleSearch = (value: string) => {
     onSearch(value);
+    setQuery('');
   };
 
   return (
@@ -30,10 +28,10 @@ const Search: React.FC<Props> = ({ onSearch }) => {
         className={styles.input}
         value={query}
         onChange={handleInputChange}
-        handleKeyDown={handleKeyDown}
+        handleKeyDown={handleSearch}
         placeholder="Search..."
       />
-      <Button onClick={() => onSearch(searchQuery)}>Search</Button>
+      <Button onClick={() => handleSearch(query)}>Search</Button>
     </div>
   );
 };

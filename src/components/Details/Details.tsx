@@ -1,54 +1,46 @@
-import { Suspense } from 'react';
-import {
-  useNavigate,
-  useSearchParams,
-  useLoaderData,
-  LoaderFunction,
-  defer,
-  Await,
-} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { apiGetPhoto } from '@/api/api';
-import { Photo } from '@/utils/interfaces';
+import { useAppSelector } from '@/hooks';
+import { useGetPhotoQuery } from '@/api/apiService';
 import { RoutePaths } from '@/routes/routes.enum';
 import { Spinner } from '@/components/Spinner';
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import styles from './Details.module.scss';
 
-export const detailsLoader: LoaderFunction = async ({ params }) => {
-  if (!params.id) {
-    return;
-  }
-  return defer({
-    photo: apiGetPhoto(+params.id),
-  });
-};
-
 const Details: React.FC = () => {
-  const [searchParams] = useSearchParams();
+  const currentPage = useAppSelector((state) => state.pagination.currentPage);
+  const searchValue = useAppSelector((state) => state.search.query);
+
   const navigate = useNavigate();
-  const data = useLoaderData() as { photo: Photo };
+  const { id } = useParams<{ id: string }>();
+  const { data: photo, isLoading, isError } = useGetPhotoQuery(id ? Number(id) : 0);
+
+  if (isLoading || isError || !photo)
+    return (
+      <aside className={styles.root}>
+        <div className={styles.container} role="loader">
+          <Spinner />
+        </div>
+      </aside>
+    );
 
   const handleCloseDetails = () => {
-    const page = searchParams.get('page');
-    navigate(`${RoutePaths.HOME}?page=${page}`, { replace: true });
+    if (searchValue) {
+      navigate(`${RoutePaths.DETAILS}/${id}?query=${searchValue}&page=${currentPage}`);
+    } else {
+      navigate(`${RoutePaths.DETAILS}/${id}?page=${currentPage}`);
+    }
   };
 
   return (
     <aside className={styles.root}>
-      <Suspense fallback={<Spinner />}>
-        <Await resolve={data.photo}>
-          {(resolvedPhoto) => (
-            <div className={styles.container}>
-              <Button className={styles.close} onClick={handleCloseDetails}>
-                Close
-              </Button>
-              <Card {...resolvedPhoto} isDetailed={true} />
-            </div>
-          )}
-        </Await>
-      </Suspense>
+      <div className={styles.container}>
+        <Button className={styles.close} onClick={handleCloseDetails}>
+          Close
+        </Button>
+        <Card {...photo} isDetailed={true} />
+      </div>
     </aside>
   );
 };

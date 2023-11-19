@@ -1,26 +1,47 @@
-import { render, waitFor, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { SearchResultContext } from '@/contexts';
 import { PhotoData } from '@/__tests__/mockData';
 import Card from './Card';
 
 describe('Card Component', () => {
-  it('should renders relevant card data', async () => {
+  it('should renders relevant card data', () => {
     render(
       <BrowserRouter>
-        <SearchResultContext.Provider value={{ searchResult: PhotoData, currentPage: 1 }}>
-          <Card {...PhotoData[0]} currentPage={1} />
-        </SearchResultContext.Provider>
+        <Card {...PhotoData[0]} />
       </BrowserRouter>
     );
 
-    const image = screen.getByAltText(PhotoData[0].alt);
-    fireEvent.load(image);
+    fireEvent.load(screen.getByAltText(PhotoData[0].alt));
 
-    await waitFor(() => {
-      expect(screen.getByText(`Photographer: ${PhotoData[0].photographer}`)).toBeInTheDocument();
-      expect(image).toBeInTheDocument();
-    });
+    expect(screen.getByText(`Photographer: ${PhotoData[0].photographer}`)).toBeInTheDocument();
+    const image = screen.getByAltText(PhotoData[0].alt);
+    expect(image).toBeInTheDocument();
+    expect(image).toHaveAttribute('src', PhotoData[0].src.medium);
+  });
+
+  it('should display detailed information when isDetailed is true', () => {
+    render(
+      <BrowserRouter>
+        <Card {...PhotoData[0]} isDetailed={true} />
+      </BrowserRouter>
+    );
+
+    fireEvent.load(screen.getByAltText(PhotoData[0].alt));
+
+    expect(screen.getByRole('link')).toHaveAttribute('href', PhotoData[0].photographer_url);
+  });
+
+  it('should render relevant card data and handle click event', () => {
+    const mockOnClickCard = vi.fn();
+
+    render(
+      <BrowserRouter>
+        <Card {...PhotoData[0]} onClickCard={mockOnClickCard} />
+      </BrowserRouter>
+    );
+
+    fireEvent.click(screen.getByRole('listitem'));
+    expect(mockOnClickCard).toHaveBeenCalledWith(PhotoData[0].id);
   });
 });

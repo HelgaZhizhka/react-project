@@ -1,4 +1,5 @@
 import { createMemoryRouter } from 'react-router-dom';
+
 import { Details } from '@/components/Details';
 import { Layout } from '@/pages/Layout';
 import { Home } from '@/pages/Home';
@@ -17,7 +18,7 @@ export const createTestRouter = (initialEntries = ['/']) => {
           element: <Home />,
           children: [
             {
-              path: `${RoutePaths.DETAILS}/${RoutePaths.DETAILS_ID}`,
+              path: 'details/:id',
               element: <Details />,
             },
           ],

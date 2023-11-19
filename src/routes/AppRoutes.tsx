@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { Details } from '@/components/Details';
-import { detailsLoader } from '@/components/Details/Details';
+// import { detailsLoader } from '@/components/Details/Details';
 import { Layout } from '@/pages/Layout';
 import { Home } from '@/pages/Home';
 import { NotFoundPage } from '@/pages/NotFoundPage';
@@ -20,7 +20,7 @@ const routes = [
           {
             path: `${RoutePaths.DETAILS}/${RoutePaths.DETAILS_ID}`,
             element: <Details />,
-            loader: detailsLoader,
+            // loader: detailsLoader,
           },
         ],
       },

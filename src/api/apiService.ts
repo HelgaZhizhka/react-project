@@ -24,7 +24,7 @@ export const apiService = createApi({
       }),
     }),
     getPhoto: builder.query<Photo, number>({
-      query: (id) => ({
+      query: (id: number) => ({
         url: `/photos/${id}`,
         headers: {
           Authorization: API_KEY,
