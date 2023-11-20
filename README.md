@@ -1,43 +1,20 @@
-# React + TypeScript + Vite Project
-
-This project is built using:
-
-- [React](https://reactjs.org/): A JavaScript library for building user interfaces.
-- [TypeScript](https://www.typescriptlang.org/): A typed superset of JavaScript that adds optional static typing.
-- [Vite](https://vitejs.dev/): A build tool that aims to provide a faster and leaner development experience for modern web projects.
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
-1. **Installation**
+First, run the development server:
 
-   First, make sure you have Node.js installed. If not, download and install it from [nodejs.org](https://nodejs.org/).
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-   ```bash
-   # Clone the repository
-   git clone react-project
-
-   # Go to the project directory
-   cd react-project
-
-   # Install dependencies
-   npm install
-   ```
-
-2. **Running the Project**
-
-   ```bash
-   # To start the development server
-   npm run dev
-   ```
-
-   The app should now be up and running at `http://localhost:5173/`!
-
-3. **Building for Production**
-
-   ```bash
-   # To build the app for production
-   npm run build
-   ```
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Features
 
