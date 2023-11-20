@@ -1,0 +1,11 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page {
+  padding-top: 10px;
+  padding-bottom: 50px;
+  flex: 1
+}
