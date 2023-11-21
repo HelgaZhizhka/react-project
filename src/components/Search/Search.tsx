@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useAppSelector } from '@/hooks';
 
+import { useAppSelector } from '@/lib/redux/hooks';
 import { SearchInput } from '@/components/SearchInput';
 import { Button } from '@/components/Button';
 import styles from './Search.module.scss';

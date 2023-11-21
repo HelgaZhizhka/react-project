@@ -1,7 +1,6 @@
-// import { useState } from 'react';
+import Image from 'next/image';
 
 import { Photo } from '@/utils/interfaces';
-// import { Spinner } from '@/components/Spinner';
 import styles from './Card.module.scss';
 
 interface Props extends Photo {
@@ -11,7 +10,7 @@ interface Props extends Photo {
 
 const Card: React.FC<Props> = ({
   id,
-  // src,
+  src,
   alt,
   avg_color,
   photographer,
@@ -19,16 +18,6 @@ const Card: React.FC<Props> = ({
   onClickCard,
   isDetailed = false,
 }) => {
-  // const [loading, setLoading] = useState(true);
-
-  // const handleImageLoad = () => {
-  //   setLoading(false);
-  // };
-
-  // const handleImageError = () => {
-  //   setLoading(false);
-  // };
-
   const handleClick = () => {
     if (onClickCard) {
       onClickCard(id);
@@ -42,18 +31,9 @@ const Card: React.FC<Props> = ({
       onClick={handleClick}
     >
       <div className={styles.wrapper} style={{ backgroundColor: avg_color }}>
-        {/* <img
-          className={`${styles.image} ${loading ? styles.hidden : ''}`}
-          src={src.medium}
-          alt={alt}
-          onLoad={handleImageLoad}
-          onError={handleImageError}
-        /> */}
+        <Image className={styles.image} src={src.medium} alt={alt} placeholder="blur" />
       </div>
 
-      {/* {loading ? (
-        <Spinner />
-      ) : ( */}
       <div className={styles.content}>
         {photographer && !isDetailed && (
           <h2 className={styles.title}>Photographer: {photographer}</h2>
@@ -68,7 +48,6 @@ const Card: React.FC<Props> = ({
           </>
         )}
       </div>
-      {/* )} */}
     </div>
   );
 };

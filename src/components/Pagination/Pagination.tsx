@@ -1,5 +1,6 @@
-import { useAppDispatch, useAppSelector } from '@/hooks';
-import { setCurrentPage } from '@/features/pagination/paginationSlice';
+import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
+import { setCurrentPage } from '@/lib/redux/slices/pagination/paginationSlice';
+
 import styles from './Pagination.module.scss';
 
 interface Props {

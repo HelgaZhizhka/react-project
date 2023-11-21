@@ -6,7 +6,7 @@ import { Button } from '@/components/Button';
 import styles from './Details.module.scss';
 
 interface Props {
-  id: string | string[];
+  id: string | string[] | undefined;
 }
 
 const Details: React.FC<Props> = ({ id }) => {
