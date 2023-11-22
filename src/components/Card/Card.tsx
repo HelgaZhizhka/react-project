@@ -31,7 +31,7 @@ const Card: React.FC<Props> = ({
       onClick={handleClick}
     >
       <div className={styles.wrapper} style={{ backgroundColor: avg_color }}>
-        <Image className={styles.image} src={src.medium} alt={alt} placeholder="blur" />
+        <Image className={styles.image} src={src.medium} alt={alt} width={300} height={300} />
       </div>
 
       <div className={styles.content}>

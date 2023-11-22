@@ -5,19 +5,19 @@ import { Card } from '@/components/Card';
 import styles from './SearchResult.module.scss';
 
 interface Props {
-  searchResult: Photo[];
+  searchResult: Photo[] | undefined;
 }
 
 const SearchResult: React.FC<Props> = ({ searchResult }) => {
-  // if (!searchResult.length) {
-  //   return <div className={styles.root}>No cards available</div>;
-  // }
-
   const router = useRouter();
 
   const handleNavigate = (detailsId: number) => {
     router.push(`/${detailsId}`);
   };
+
+  if (!searchResult) {
+    return <div className={styles.root}>No cards available</div>;
+  }
 
   return (
     <div className={styles.root}>

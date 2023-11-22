@@ -1,16 +1,24 @@
 import type { AppProps } from 'next/app';
+import { Provider } from 'react-redux';
 
 import { wrapper } from '@/lib/redux/store';
 import { Layout } from '@/components/Layout';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import '@/styles/index.scss';
 
-const App = ({ Component, pageProps }: AppProps) => (
-  <ErrorBoundary>
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
-  </ErrorBoundary>
-);
+const App = ({ Component, ...rest }: AppProps) => {
+  const { store, props } = wrapper.useWrappedStore(rest);
+  const { pageProps } = props;
 
-export default wrapper.withRedux(App);
+  return (
+    <Provider store={store}>
+      <ErrorBoundary>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ErrorBoundary>
+    </Provider>
+  );
+};
+
+export default App;

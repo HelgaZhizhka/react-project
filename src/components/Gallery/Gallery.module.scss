@@ -1,23 +1,24 @@
 .root {
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100vh;
-  width: 300px;
-  overflow-y: auto;
-  z-index: 100;
+  position: relative;
 }
 
-.container {
-  min-height: 100%;
-  padding: 50px 20px 20px;
-  background-color: var(--component-bg);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+.section {
+  margin-top: 20px;
 }
 
-.close {
-  position: absolute;
-  top: 5px;
-  right: 20px;
-  z-index: 10;
+.error {
+  color: var(--color-error);
+}
+
+.footer {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.isDetailed {
+  @media screen and (max-width: 1279px) {
+    padding-right: 300px;
+  }
 }

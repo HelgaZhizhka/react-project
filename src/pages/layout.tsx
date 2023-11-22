@@ -1,23 +1,16 @@
+import { Photo } from '@/utils/interfaces';
 import { Gallery } from '@/components/Gallery';
-import styles from '@/styles/Home.module.scss';
 
-interface Prop {
+interface Props {
+  galleryData: Photo[];
   children?: React.ReactNode;
 }
 
-const LayoutHome: React.FC<Prop> = ({ children }) => {
-  return (
-    <>
-      <div className={styles.root}>
-        <div className="container">
-          <div className={styles.section}>
-            <Gallery />
-          </div>
-        </div>
-      </div>
-      {children}
-    </>
-  );
-};
+const LayoutPage: React.FC<Props> = ({ children, galleryData }) => (
+  <>
+    <Gallery galleryData={galleryData} />
+    {children}
+  </>
+);
 
-export default LayoutHome;
+export default LayoutPage;
