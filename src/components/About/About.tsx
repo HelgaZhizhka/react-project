@@ -2,14 +2,15 @@
 // import { useGetPhotoQuery } from '@/api/apiService';
 // import { Spinner } from '@/components/Spinner';
 import { Button } from '@/components/Button';
-// import { Card } from '@/components/Card';
-import styles from './Details.module.scss';
+import { Photo } from '@/utils/interfaces';
+import { Card } from '@/components/Card';
+import styles from './About.module.scss';
 
 interface Props {
-  id: string | string[] | undefined;
+  photoData: Photo;
 }
 
-const Details: React.FC<Props> = ({ id }) => {
+const About: React.FC<Props> = ({ photoData }) => {
   // const currentPage = useAppSelector((state) => state.pagination.currentPage);
   // const searchValue = useAppSelector((state) => state.search.query);
 
@@ -37,11 +38,10 @@ const Details: React.FC<Props> = ({ id }) => {
     <aside className={styles.root}>
       <div className={styles.container}>
         <Button className={styles.close}>Close</Button>
-        <h2>Detailed page {id}</h2>
-        {/* <Card {...photo} isDetailed={true} /> */}
+        <Card {...photoData} isDetailed={true} />
       </div>
     </aside>
   );
 };
 
-export default Details;
+export default About;

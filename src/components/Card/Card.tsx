@@ -11,6 +11,8 @@ interface Props extends Photo {
 const Card: React.FC<Props> = ({
   id,
   src,
+  width,
+  height,
   alt,
   avg_color,
   photographer,
@@ -31,7 +33,15 @@ const Card: React.FC<Props> = ({
       onClick={handleClick}
     >
       <div className={styles.wrapper} style={{ backgroundColor: avg_color }}>
-        <Image className={styles.image} src={src.medium} alt={alt} width={300} height={300} />
+        <Image
+          className={styles.image}
+          src={!isDetailed ? src?.medium : src?.large}
+          alt={alt}
+          width={width}
+          height={height}
+          priority={isDetailed}
+          placeholder="empty"
+        />
       </div>
 
       <div className={styles.content}>

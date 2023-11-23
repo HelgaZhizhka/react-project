@@ -4,15 +4,13 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { SearchResponse } from '@/utils/interfaces';
 import { getPopularity, searchPhotos } from '@/lib/services/apiService';
 import { wrapper } from '@/lib/redux/store';
+import { Spinner } from '@/components/Spinner';
 
 import LayoutPage from './layout';
 
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
-    const query = context.query?.query as string | undefined;
-    const page = parseInt(context.query?.page as string) || 1;
-    const perPage = parseInt(context.query?.perPage as string) || 10;
-
+    const { query, page = 1, perPage = 10 } = context.query;
     let data: SearchResponse | undefined;
 
     if (query) {
@@ -25,17 +23,24 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
       return { notFound: true };
     }
 
-    return { props: { photos: data.photos } };
+    return { props: { photos: data.photos, totalResults: data.total_results } };
   }
 );
 
-const Home: React.FC<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ photos }) => {
+const Home: React.FC<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
+  photos,
+  totalResults,
+}) => {
+  if (!photos) {
+    return <Spinner />;
+  }
+
   return (
     <>
       <Head>
         <title>Photo gallery</title>
       </Head>
-      <LayoutPage galleryData={photos} />
+      <LayoutPage galleryData={photos} totalResults={totalResults} />
     </>
   );
 };

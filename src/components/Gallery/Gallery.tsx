@@ -1,88 +1,68 @@
-// import type { InferGetServerSidePropsType, GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
-import { hasErrorMessage } from '@/utils/functions';
-// import { SearchResponse } from '@/utils/interfaces';
 import { Photo } from '@/utils/interfaces';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
-import { setCurrentPage } from '@/lib/redux/slices/pagination/paginationSlice';
-import {
-  // getPopularity,
-  // getRunningQueriesThunk,
-  // searchPhotos,
-  useGetPopularityQuery,
-  useSearchPhotosQuery,
-} from '@/lib/services/apiService';
-// import { wrapper } from '@/lib/redux/store';
+import { setCurrentPage, setTotalPages } from '@/lib/redux/slices/pagination/paginationSlice';
 import { Pagination } from '@/components/Pagination';
 import { Search } from '@/components/Search';
 import { Select } from '@/components/Select';
-// import { PER_PAGE } from '@/components/Select/Select.enums';
 import { SearchResult } from '@/components/SearchResult';
-import { Spinner } from '@/components/Spinner';
-import { NotFound } from '@/components/NotFound';
 import styles from './Gallery.module.scss';
+import { setSearchQuery } from '@/lib/redux/slices/search/searchSlice';
+import { setItemsPerPage } from '@/lib/redux/slices/itemsPerPage/itemsPerPageSlice';
 
 interface Props {
   galleryData: Photo[] | undefined;
+  totalResults?: number;
 }
 
-const Gallery: React.FC<Props> = ({ galleryData }) => {
+const Gallery: React.FC<Props> = ({ galleryData, totalResults }) => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
-  const searchValue = useAppSelector((state) => state.search.query);
+  const searchQuery = useAppSelector((state) => state.search.query);
   const currentPage = useAppSelector((state) => state.pagination.currentPage);
   const perPage = useAppSelector((state) => state.itemsPerPage.value);
 
   const handlePageChange = (page: number) => {
     dispatch(setCurrentPage(page));
+
+    if (searchQuery) {
+      router.push(`/?query=${searchQuery}&page=${page}&per_page=${perPage}`);
+    } else {
+      router.push(`/?page=${page}&per_page=${perPage}`);
+    }
   };
 
   const handlePerPageChange = (value: number) => {
+    dispatch(setItemsPerPage(value));
     dispatch(setCurrentPage(1));
-    dispatch(setCurrentPage(value));
+
+    if (searchQuery) {
+      router.push(`/?query=${searchQuery}&page=${currentPage}&per_page=${perPage}`);
+    } else {
+      router.push(`/?page=${currentPage}&per_page=${perPage}`);
+    }
   };
 
   const handleSearch = (query: string) => {
-    dispatch(setCurrentPage(1));
-    console.log(query);
+    if (query !== searchQuery) {
+      router.push(`/?query=${query}&page=${currentPage}&per_page=${perPage}`);
+      dispatch(setSearchQuery(query));
+    }
   };
 
-  let photos: Photo[] | undefined = galleryData;
-  let isLoading = false;
-  let error = null;
-
-  const searchResult = useSearchPhotosQuery(
-    { query: searchValue, page: currentPage, perPage },
-    { skip: !searchValue }
-  );
-
-  const popularityResult = useGetPopularityQuery(
-    { page: currentPage, perPage },
-    { skip: !!searchValue }
-  );
-
-  photos = searchValue.trim() ? searchResult.data?.photos : popularityResult.data?.photos;
-
-  isLoading = searchResult.isLoading || popularityResult.isLoading;
-  error = searchResult.error || popularityResult.error;
-
-  // const totalResults = searchValue
-  //   ? searchResult.data?.total_results
-  //   : popularityResult.data?.total_results;
-
-  if (isLoading) return <Spinner size="large" variant="global" />;
-  if (error) {
-    return <h3 className={styles.error}>{hasErrorMessage(error) && error.message}. Try again.</h3>;
-  }
-
-  // const photos = searchValue.trim() ? searchResult.data?.photos : popularityResult.data?.photos;
-
-  if (!photos?.length) return <NotFound />;
+  useEffect(() => {
+    if (totalResults !== undefined) {
+      dispatch(setTotalPages(Math.ceil(totalResults / perPage)));
+    }
+  }, [totalResults, dispatch, perPage]);
 
   return (
     <div className="container">
       <Search onSearch={handleSearch} />
       <div className={styles.section}>
-        <SearchResult searchResult={photos} />
+        <SearchResult searchResult={galleryData} />
       </div>
       <div className={styles.footer}>
         <Select value={perPage} onChange={handlePerPageChange} />

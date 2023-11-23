@@ -3,12 +3,13 @@ import { Gallery } from '@/components/Gallery';
 
 interface Props {
   galleryData: Photo[];
+  totalResults?: number;
   children?: React.ReactNode;
 }
 
-const LayoutPage: React.FC<Props> = ({ children, galleryData }) => (
+const LayoutPage: React.FC<Props> = ({ children, galleryData, totalResults }) => (
   <>
-    <Gallery galleryData={galleryData} />
+    <Gallery galleryData={galleryData} totalResults={totalResults} />
     {children}
   </>
 );

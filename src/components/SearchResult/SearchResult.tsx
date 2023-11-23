@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { Photo } from '@/utils/interfaces';
 import { Card } from '@/components/Card';
 import styles from './SearchResult.module.scss';
+import { Routes } from '@/utils/enums';
 
 interface Props {
   searchResult: Photo[] | undefined;
@@ -11,8 +12,8 @@ interface Props {
 const SearchResult: React.FC<Props> = ({ searchResult }) => {
   const router = useRouter();
 
-  const handleNavigate = (detailsId: number) => {
-    router.push(`/${detailsId}`);
+  const handleNavigate = (id: number) => {
+    router.push(`${Routes.ABOUT}/${id}`, undefined, { scroll: false });
   };
 
   if (!searchResult) {

@@ -20,8 +20,8 @@ export const apiService = createApi({
       SearchResponse,
       {
         query: string | string[];
-        page: number | string | string[];
-        perPage: number | string | string[];
+        page: string | number | string[];
+        perPage: string | number | string[];
       }
     >({
       query: ({ query, page, perPage }) => ({
@@ -29,7 +29,10 @@ export const apiService = createApi({
         headers: { Authorization: API_KEY },
       }),
     }),
-    getPopularity: builder.query<SearchResponse, { page: number; perPage: number }>({
+    getPopularity: builder.query<
+      SearchResponse,
+      { page: string | number | string[]; perPage: string | number | string[] }
+    >({
       query: ({ page, perPage }) => ({
         url: `/curated?page=${page}&per_page=${perPage}`,
         headers: {
@@ -38,7 +41,7 @@ export const apiService = createApi({
       }),
     }),
     getPhoto: builder.query<Photo, number>({
-      query: (id: number) => ({
+      query: (id) => ({
         url: `/photos/${id}`,
         headers: {
           Authorization: API_KEY,
