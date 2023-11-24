@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 
 import { Routes } from '@/utils/enums';
-import { useAppSelector } from '@/lib/redux/hooks';
 import { Button } from '@/components/Button';
 import { Photo } from '@/utils/interfaces';
 import { Card } from '@/components/Card';
@@ -13,21 +12,17 @@ interface Props {
 
 const About: React.FC<Props> = ({ photoData }) => {
   const router = useRouter();
-  const searchQuery = useAppSelector((state) => state.search.query);
-  const currentPage = useAppSelector((state) => state.pagination.currentPage);
-  const itemsPerPage = useAppSelector((state) => state.itemsPerPage.perPage);
+  const query = typeof router.query.query === 'string' ? router.query.query : '';
+  const page = typeof router.query.page === 'string' ? parseInt(router.query.page) : 1;
+  const per_page = typeof router.query.per_page === 'string' ? parseInt(router.query.per_page) : 10;
 
   const handleClose = () => {
-    if (searchQuery) {
-      router.push(
-        `${Routes.HOME}?query=${searchQuery}&page=${currentPage}&per_page=${itemsPerPage}`,
-        undefined,
-        {
-          scroll: false,
-        }
-      );
+    if (query && query !== '') {
+      router.push(`${Routes.HOME}?query=${query}&page=${page}&per_page=${per_page}`, undefined, {
+        scroll: false,
+      });
     } else {
-      router.push(`${Routes.HOME}?page=${currentPage}&per_page=${itemsPerPage}`, undefined, {
+      router.push(`${Routes.HOME}?page=${page}&per_page=${per_page}`, undefined, {
         scroll: false,
       });
     }

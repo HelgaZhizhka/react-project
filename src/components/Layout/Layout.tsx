@@ -6,12 +6,11 @@ import { Footer } from '@/components/Footer';
 import styles from './Layout.module.scss';
 
 const work = Work_Sans({ subsets: ['latin'] });
-
-interface Prop {
+interface Props {
   children: React.ReactNode;
 }
 
-const Layout: React.FC<Prop> = ({ children }) => (
+const Layout: React.FC<Props> = ({ children }) => (
   <>
     <Head>
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

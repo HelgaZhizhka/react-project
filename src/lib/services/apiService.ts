@@ -19,32 +19,32 @@ export const apiService = createApi({
     searchPhotos: builder.query<
       SearchResponse,
       {
-        query: string | string[] | undefined;
-        page: string | number | string[] | undefined;
-        perPage: string | number | string[] | undefined;
+        query: string;
+        page: number;
+        per_page: number;
       }
     >({
-      query: ({ query, page, perPage }) => ({
-        url: `/search?query=${query}&page=${page}&per_page=${perPage}`,
+      query: ({ query, page, per_page }) => ({
+        url: `/search?query=${query}&page=${page}&per_page=${per_page}`,
         headers: { Authorization: API_KEY },
       }),
     }),
     getPopularity: builder.query<
       SearchResponse,
       {
-        page: string | number | string[] | undefined;
-        perPage: string | number | string[] | undefined;
+        page: number;
+        per_page: number;
       }
     >({
-      query: ({ page, perPage }) => ({
-        url: `/curated?page=${page}&per_page=${perPage}`,
+      query: ({ page, per_page }) => ({
+        url: `/curated?page=${page}&per_page=${per_page}`,
         headers: {
           Authorization: API_KEY,
         },
       }),
     }),
     getPhoto: builder.query<Photo, number>({
-      query: (id) => ({
+      query: (id: number) => ({
         url: `/photos/${id}`,
         headers: {
           Authorization: API_KEY,

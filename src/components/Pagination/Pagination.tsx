@@ -1,42 +1,39 @@
-import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
-import { setCurrentPage } from '@/lib/redux/slices/paginationSlice';
+import { useRouter } from 'next/router';
 
 import styles from './Pagination.module.scss';
 
 interface Props {
+  totalPages: number;
   onPageChange: (newPage: number) => void;
 }
 
-const Pagination: React.FC<Props> = ({ onPageChange }) => {
-  const dispatch = useAppDispatch();
-  const currentPage = useAppSelector((state) => state.pagination.currentPage);
-  const totalPages = useAppSelector((state) => state.pagination.totalPages);
+const Pagination: React.FC<Props> = ({ totalPages, onPageChange }) => {
+  const router = useRouter();
+  const page = typeof router.query.page === 'string' ? parseInt(router.query.page) : 1;
 
   const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      onPageChange(currentPage + 1);
-      dispatch(setCurrentPage(currentPage + 1));
+    if (page < totalPages) {
+      onPageChange(page + 1);
     }
   };
 
   const handlePrevPage = () => {
-    if (currentPage > 1) {
-      onPageChange(currentPage - 1);
-      dispatch(setCurrentPage(currentPage - 1));
+    if (page > 1) {
+      onPageChange(page - 1);
     }
   };
 
   return (
     <div className={styles.root}>
-      <button className={styles.prev} onClick={handlePrevPage} disabled={currentPage <= 1}>
+      <button className={styles.prev} onClick={handlePrevPage} disabled={page <= 1}>
         Prev
       </button>
       <span className={styles.page}>
-        <span className={styles.current}>{currentPage}</span>
+        <span className={styles.current}>{page}</span>
         из
         <span className={styles.total}>{totalPages}</span>
       </span>
-      <button className={styles.next} onClick={handleNextPage} disabled={currentPage >= totalPages}>
+      <button className={styles.next} onClick={handleNextPage} disabled={page >= totalPages}>
         Next
       </button>
     </div>

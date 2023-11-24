@@ -9,13 +9,17 @@ import LayoutPage from './layout';
 
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
-    const { query = '', page = 1, perPage = 10 } = context.query;
-    let data: SearchResponse | undefined;
+    const query = typeof context.query.query === 'string' ? context.query.query : '';
+    const page = typeof context.query.page === 'string' ? parseInt(context.query.page) : 1;
+    const per_page =
+      typeof context.query.per_page === 'string' ? parseInt(context.query.per_page) : 10;
+    console.log(context.query);
+    let data: SearchResponse;
 
-    if (query) {
-      data = await store.dispatch(searchPhotos.initiate({ query, page, perPage })).unwrap();
+    if (query && query !== '') {
+      data = await store.dispatch(searchPhotos.initiate({ query, page, per_page })).unwrap();
     } else {
-      data = await store.dispatch(getPopularity.initiate({ page, perPage })).unwrap();
+      data = await store.dispatch(getPopularity.initiate({ page, per_page })).unwrap();
     }
 
     if (!data) {
