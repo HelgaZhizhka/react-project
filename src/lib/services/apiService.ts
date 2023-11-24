@@ -19,9 +19,9 @@ export const apiService = createApi({
     searchPhotos: builder.query<
       SearchResponse,
       {
-        query: string | string[];
-        page: string | number | string[];
-        perPage: string | number | string[];
+        query: string | string[] | undefined;
+        page: string | number | string[] | undefined;
+        perPage: string | number | string[] | undefined;
       }
     >({
       query: ({ query, page, perPage }) => ({
@@ -31,7 +31,10 @@ export const apiService = createApi({
     }),
     getPopularity: builder.query<
       SearchResponse,
-      { page: string | number | string[]; perPage: string | number | string[] }
+      {
+        page: string | number | string[] | undefined;
+        perPage: string | number | string[] | undefined;
+      }
     >({
       query: ({ page, perPage }) => ({
         url: `/curated?page=${page}&per_page=${perPage}`,

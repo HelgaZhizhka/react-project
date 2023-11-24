@@ -1,12 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { PER_PAGE } from '@/components/Select/Select.enums';
 interface ItemsPerPageState {
-  value: number;
+  perPage: number;
 }
 
 const initialState: ItemsPerPageState = {
-  value: PER_PAGE[10],
+  perPage: 10,
 };
 
 const itemsPerPageSlice = createSlice({
@@ -14,7 +13,7 @@ const itemsPerPageSlice = createSlice({
   initialState,
   reducers: {
     setItemsPerPage(state, action: PayloadAction<number>) {
-      state.value = action.payload;
+      state.perPage = action.payload;
     },
   },
 });

@@ -1,7 +1,3 @@
-import { useState } from 'react';
-
-import { useAppSelector } from '@/lib/redux/hooks';
-import { SearchInput } from '@/components/SearchInput';
 import { Button } from '@/components/Button';
 import styles from './Search.module.scss';
 
@@ -10,29 +6,35 @@ interface Props {
 }
 
 const Search: React.FC<Props> = ({ onSearch }) => {
-  const searchQuery = useAppSelector((state) => state.search.query);
-  const [query, setQuery] = useState(searchQuery);
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const formData = new FormData(event.currentTarget);
+    const query = formData.get('query');
 
-  const handleInputChange = (value: string) => {
-    setQuery(value);
+    if (typeof query === 'string') {
+      onSearch(query.trim());
+    }
   };
 
-  const handleSearch = (value: string) => {
-    onSearch(value);
-    setQuery('');
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      onSearch(event.currentTarget.value.trim());
+    }
   };
 
   return (
-    <div className={styles.root}>
-      <SearchInput
-        className={styles.input}
-        value={query}
-        onChange={handleInputChange}
-        handleKeyDown={handleSearch}
-        placeholder="Search..."
-      />
-      <Button onClick={() => handleSearch(query)}>Search</Button>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <div className={styles.root}>
+        <input
+          className={styles.input}
+          type="text"
+          name="query"
+          onKeyDown={handleKeyDown}
+          placeholder="Search..."
+          autoFocus={true}
+        />
+        <Button type="submit">Search</Button>
+      </div>
+    </form>
   );
 };
 

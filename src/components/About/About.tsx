@@ -1,6 +1,7 @@
-// import { useAppSelector } from '@/hooks';
-// import { useGetPhotoQuery } from '@/api/apiService';
-// import { Spinner } from '@/components/Spinner';
+import { useRouter } from 'next/router';
+
+import { Routes } from '@/utils/enums';
+import { useAppSelector } from '@/lib/redux/hooks';
 import { Button } from '@/components/Button';
 import { Photo } from '@/utils/interfaces';
 import { Card } from '@/components/Card';
@@ -11,33 +12,33 @@ interface Props {
 }
 
 const About: React.FC<Props> = ({ photoData }) => {
-  // const currentPage = useAppSelector((state) => state.pagination.currentPage);
-  // const searchValue = useAppSelector((state) => state.search.query);
+  const router = useRouter();
+  const searchQuery = useAppSelector((state) => state.search.query);
+  const currentPage = useAppSelector((state) => state.pagination.currentPage);
+  const itemsPerPage = useAppSelector((state) => state.itemsPerPage.perPage);
 
-  // const { id } = useParams<{ id: string }>();
-  // const { data: photo, isLoading, isError } = useGetPhotoQuery(id ? Number(id) : 0);
-
-  // if (isLoading || isError || !photo)
-  //   return (
-  //     <aside className={styles.root}>
-  //       <div className={styles.container} role="loader">
-  //         <Spinner />
-  //       </div>
-  //     </aside>
-  //   );
-
-  // const handleCloseDetails = () => {
-  //   if (searchValue) {
-  //     navigate(`${RoutePaths.HOME}?query=${searchValue}&page=${currentPage}`, { replace: true });
-  //   } else {
-  //     navigate(`${RoutePaths.HOME}?page=${currentPage}`, { replace: true });
-  //   }
-  // };
+  const handleClose = () => {
+    if (searchQuery) {
+      router.push(
+        `${Routes.HOME}?query=${searchQuery}&page=${currentPage}&per_page=${itemsPerPage}`,
+        undefined,
+        {
+          scroll: false,
+        }
+      );
+    } else {
+      router.push(`${Routes.HOME}?page=${currentPage}&per_page=${itemsPerPage}`, undefined, {
+        scroll: false,
+      });
+    }
+  };
 
   return (
     <aside className={styles.root}>
       <div className={styles.container}>
-        <Button className={styles.close}>Close</Button>
+        <Button className={styles.close} onClick={handleClose}>
+          Close
+        </Button>
         <Card {...photoData} isDetailed={true} />
       </div>
     </aside>

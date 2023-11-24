@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 
+import { useAppSelector } from '@/lib/redux/hooks';
 import { Photo } from '@/utils/interfaces';
 import { Card } from '@/components/Card';
 import styles from './SearchResult.module.scss';
@@ -11,9 +12,24 @@ interface Props {
 
 const SearchResult: React.FC<Props> = ({ searchResult }) => {
   const router = useRouter();
+  const searchQuery = useAppSelector((state) => state.search.query);
+  const currentPage = useAppSelector((state) => state.pagination.currentPage);
+  const itemsPerPage = useAppSelector((state) => state.itemsPerPage.perPage);
 
   const handleNavigate = (id: number) => {
-    router.push(`${Routes.ABOUT}/${id}`, undefined, { scroll: false });
+    if (searchQuery) {
+      router.push(
+        `${Routes.ABOUT}/${id}?query=${searchQuery}&page=${currentPage}&per_page=${itemsPerPage}`,
+        undefined,
+        {
+          scroll: false,
+        }
+      );
+    } else {
+      router.push(`${Routes.ABOUT}/${id}?page=${currentPage}&per_page=${itemsPerPage}`, undefined, {
+        scroll: false,
+      });
+    }
   };
 
   if (!searchResult) {

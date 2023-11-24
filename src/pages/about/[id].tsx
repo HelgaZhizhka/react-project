@@ -5,7 +5,6 @@ import { Photo, SearchResponse } from '@/utils/interfaces';
 import { getPhoto, getPopularity, searchPhotos } from '@/lib/services/apiService';
 import { wrapper } from '@/lib/redux/store';
 import { About } from '@/components/About';
-import { Spinner } from '@/components/Spinner';
 import LayoutPage from '../layout';
 
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
@@ -41,16 +40,12 @@ const AboutPage: React.FC<InferGetServerSidePropsType<typeof getServerSideProps>
   photos,
   totalResults,
 }) => {
-  if (!photoData || !photos) {
-    return <Spinner />;
-  }
-
   return (
     <>
       <Head>
         <title>About | photo</title>
       </Head>
-      <LayoutPage galleryData={photos} totalResults={totalResults}>
+      <LayoutPage photos={photos} totalResults={totalResults}>
         <About photoData={photoData} />
       </LayoutPage>
     </>

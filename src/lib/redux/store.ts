@@ -2,9 +2,9 @@ import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 
 import { apiService } from '@/lib/services/apiService';
-import searchReducer from '@/lib/redux/slices/search/searchSlice';
-import itemsPerPageReducer from '@/lib/redux/slices/itemsPerPage/itemsPerPageSlice';
-import paginationSliceReducer from '@/lib/redux/slices/pagination/paginationSlice';
+import searchReducer from '@/lib/redux/slices/searchSlice';
+import itemsPerPageReducer from '@/lib/redux/slices/itemsPerPageSlice';
+import paginationSliceReducer from '@/lib/redux/slices/paginationSlice';
 
 export const createStore = () =>
   configureStore({
