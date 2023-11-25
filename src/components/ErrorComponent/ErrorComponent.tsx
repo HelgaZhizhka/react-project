@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-
 import { Button } from '@/components/Button';
 import styles from './ErrorComponent.module.scss';
 
@@ -8,17 +6,9 @@ type Props = {
 };
 
 const ErrorComponent: React.FC<Props> = ({ className }) => {
-  const [throwError, setThrowError] = useState(false);
-
   const handleClick = () => {
-    setThrowError(true);
+    throw new Error('I crashed!');
   };
-
-  useEffect(() => {
-    if (throwError) {
-      throw new Error('I crashed!');
-    }
-  }, [throwError]);
 
   return (
     <Button className={`${styles.button} ${className}`} onClick={handleClick}>
