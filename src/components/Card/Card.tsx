@@ -51,7 +51,7 @@ const Card: React.FC<Props> = (props) => {
       <div className={styles.wrapper} style={{ backgroundColor: avg_color }}>
         <Image
           className={styles.image}
-          src={!isDetailed ? src?.medium : src?.large}
+          src={isDetailed ? src?.large : src?.medium}
           alt={alt}
           width={width}
           height={height}
