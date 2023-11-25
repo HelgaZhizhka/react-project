@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
-import { Photo, SearchResponse } from '@/utils/interfaces';
+import { Photo, SearchResponse } from '@/types/interfaces';
 import { getPhoto, getPopularity, searchPhotos } from '@/lib/services/apiService';
 import { wrapper } from '@/lib/redux/store';
 import { About } from '@/components/About';

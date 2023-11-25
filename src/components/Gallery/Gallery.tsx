@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-import { Photo } from '@/utils/interfaces';
+import { Photo } from '@/types/interfaces';
 import { defaultPerPage } from '@/utils/constants';
 import { Pagination } from '@/components/Pagination';
 import { Search } from '@/components/Search';

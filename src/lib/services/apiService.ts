@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { HYDRATE } from 'next-redux-wrapper';
 
-import { Photo, SearchResponse } from '@/utils/interfaces';
+import { Photo, SearchResponse } from '@/types/interfaces';
 
 const API_KEY = process.env.API_KEY;
 const API_URL = process.env.API_URL;

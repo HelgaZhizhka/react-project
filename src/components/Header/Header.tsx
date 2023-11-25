@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { Routes } from '@/utils/enums';
+import { Routes } from '@/types/enums';
 import { ErrorComponent } from '@/components/ErrorComponent';
 import styles from './Header.module.scss';
 

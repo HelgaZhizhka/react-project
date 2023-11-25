@@ -1,5 +1,5 @@
 import { Gallery } from '@/components/Gallery';
-import { Photo } from '@/utils/interfaces';
+import { Photo } from '@/types/interfaces';
 
 interface Props {
   children?: React.ReactNode;

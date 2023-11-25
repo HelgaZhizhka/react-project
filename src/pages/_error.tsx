@@ -2,7 +2,7 @@ import { NextPageContext } from 'next';
 import Link from 'next/link';
 import Head from 'next/head';
 
-import { Routes } from '@/utils/enums';
+import { Routes } from '@/types/enums';
 import styles from '@/styles/Page404.module.scss';
 
 interface Props {

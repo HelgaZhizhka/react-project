@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 
-import { Routes } from '@/utils/enums';
+import { Routes } from '@/types/enums';
 import styles from '@/styles/Page404.module.scss';
 
 const Page404: React.FC = () => (
