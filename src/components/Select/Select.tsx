@@ -1,27 +1,33 @@
-import { PER_PAGE } from './Select.enums';
+import { useRouter } from 'next/router';
+
+import { currentPage, perPage } from '@/utils/constants';
 import styles from './Select.module.scss';
 
 interface Props {
   value: number;
-  onChange: (value: number) => void;
   className?: string;
 }
 
-const Select: React.FC<Props> = ({ onChange, value, className }) => {
-  const selectClass = !className ? styles.root : `${styles.root} ${className}`;
+const Select: React.FC<Props> = ({ value, className }) => {
+  const router = useRouter();
+  const { query, page = currentPage } = router.query;
+  const selectClass = className ? `${styles.root} ${className}` : styles.root;
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newPerPage = Number(event.target.value);
-    onChange(newPerPage);
+  const handleChange: React.ChangeEventHandler<HTMLSelectElement> = ({ target: { value } }) => {
+    if (query) {
+      router.push(`/?query=${query}&page=${page}&per_page=${value}`);
+    } else {
+      router.push(`/?page=${page}&per_page=${value}`);
+    }
   };
 
   return (
     <select className={selectClass} value={value} onChange={handleChange}>
-      <option value={PER_PAGE[10]}>{PER_PAGE[10]}</option>
-      <option value={PER_PAGE[20]}>{PER_PAGE[20]}</option>
-      <option value={PER_PAGE[30]}>{PER_PAGE[30]}</option>
-      <option value={PER_PAGE[40]}>{PER_PAGE[40]}</option>
-      <option value={PER_PAGE[50]}>{PER_PAGE[50]}</option>
+      {perPage.map((item) => (
+        <option key={item} value={item}>
+          {item}
+        </option>
+      ))}
     </select>
   );
 };

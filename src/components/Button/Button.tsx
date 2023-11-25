@@ -1,17 +1,18 @@
 import styles from './Button.module.scss';
 
-interface Props {
-  children: string;
-  type?: 'button' | 'submit' | 'reset';
-  onClick?: () => void;
+type Props = {
+  onClick?(): void;
   className?: string;
-}
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
+} & React.PropsWithChildren;
 
-const Button: React.FC<Props> = ({ children, onClick, className, type = 'button' }) => {
-  const btnClass = !className ? styles.root : `${styles.root} ${className}`;
+const Button: React.FC<Props> = (props) => {
+  const { onClick, className, type = 'button', disabled, children } = props;
+  const btnClass = className ? `${styles.root} ${className}` : styles.root;
 
   return (
-    <button className={btnClass} onClick={onClick} type={type}>
+    <button className={btnClass} onClick={onClick} type={type} disabled={disabled}>
       {children}
     </button>
   );

@@ -1,15 +1,15 @@
-import { SIZE, SPINNER_VARIANT } from '@/utils/types';
+import { SIZE, SPINNER_VARIANT } from '@/types';
 import styles from './Spinner.module.scss';
 
-interface Props {
+type Props = {
   size?: SIZE;
   variant?: SPINNER_VARIANT;
-  children?: string;
   className?: string;
-}
+} & React.PropsWithChildren<unknown>;
 
-const Spinner: React.FC<Props> = ({ size = 'small', variant = 'local', children, className }) => {
-  const spinnerClass = !className ? styles.root : `${styles.root} ${className}`;
+const Spinner: React.FC<Props> = (props) => {
+  const { size = 'small', variant = 'local', className, children } = props;
+  const spinnerClass = className ? `${styles.root} ${className}` : styles.root;
 
   return (
     <div className={`${spinnerClass} ${styles[size]} ${styles[variant]}`}>

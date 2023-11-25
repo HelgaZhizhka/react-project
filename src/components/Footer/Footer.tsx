@@ -1,11 +1,11 @@
 import styles from './Footer.module.scss';
 
-interface Props {
+type Props = {
   className?: string;
-}
+};
 
 const Footer: React.FC<Props> = ({ className }) => {
-  const footerClass = !className ? styles.root : `${styles.root} ${className}`;
+  const footerClass = className ? `${styles.root} ${className}` : styles.root;
 
   return (
     <footer className={footerClass}>

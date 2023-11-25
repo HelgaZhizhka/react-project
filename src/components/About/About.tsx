@@ -5,26 +5,21 @@ import { Button } from '@/components/Button';
 import { Photo } from '@/utils/interfaces';
 import { Card } from '@/components/Card';
 import styles from './About.module.scss';
+import { currentPage, defaultPerPage } from '@/utils/constants';
 
-interface Props {
+type Props = {
   photoData: Photo;
-}
+};
 
 const About: React.FC<Props> = ({ photoData }) => {
   const router = useRouter();
-  const query = typeof router.query.query === 'string' ? router.query.query : '';
-  const page = typeof router.query.page === 'string' ? parseInt(router.query.page) : 1;
-  const per_page = typeof router.query.per_page === 'string' ? parseInt(router.query.per_page) : 10;
+  const { query = '', page = currentPage, per_page = defaultPerPage } = router.query;
 
   const handleClose = () => {
-    if (query && query !== '') {
-      router.push(`${Routes.HOME}?query=${query}&page=${page}&per_page=${per_page}`, undefined, {
-        scroll: false,
-      });
+    if (query) {
+      router.push(`${Routes.HOME}?query=${query}&page=${page}&per_page=${per_page}`);
     } else {
-      router.push(`${Routes.HOME}?page=${page}&per_page=${per_page}`, undefined, {
-        scroll: false,
-      });
+      router.push(`${Routes.HOME}?page=${page}&per_page=${per_page}`);
     }
   };
 

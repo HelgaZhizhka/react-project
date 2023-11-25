@@ -4,12 +4,12 @@ import { Routes } from '@/utils/enums';
 import { ErrorComponent } from '@/components/ErrorComponent';
 import styles from './Header.module.scss';
 
-interface Props {
+type Props = {
   className?: string;
-}
+};
 
 const Header: React.FC<Props> = ({ className }) => {
-  const headerClass = !className ? styles.root : `${styles.root} ${className}`;
+  const headerClass = className ? `${styles.root} ${className}` : styles.root;
 
   return (
     <header className={headerClass}>

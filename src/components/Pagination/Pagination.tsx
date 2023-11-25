@@ -1,41 +1,50 @@
 import { useRouter } from 'next/router';
 
+import { currentPage, defaultPerPage } from '@/utils/constants';
+import { Button } from '@/components/Button';
 import styles from './Pagination.module.scss';
 
-interface Props {
+type Props = {
   totalPages: number;
-  onPageChange: (newPage: number) => void;
-}
+};
 
-const Pagination: React.FC<Props> = ({ totalPages, onPageChange }) => {
+const Pagination: React.FC<Props> = ({ totalPages }) => {
   const router = useRouter();
-  const page = typeof router.query.page === 'string' ? parseInt(router.query.page) : 1;
+  const { query = '', page = currentPage, per_page = defaultPerPage } = router.query;
 
-  const handleNextPage = () => {
-    if (page < totalPages) {
-      onPageChange(page + 1);
+  const onChange = (newPage: number) => {
+    if (query) {
+      router.push(`/?query=${query}&page=${newPage}&per_page=${per_page}`);
+    } else {
+      router.push(`/?page=${newPage}&per_page=${per_page}`);
     }
   };
 
-  const handlePrevPage = () => {
-    if (page > 1) {
-      onPageChange(page - 1);
+  const handleClickNextPage = () => {
+    if (+page < totalPages) {
+      onChange(+page + 1);
+    }
+  };
+
+  const handleClickPrevPage = () => {
+    if (+page > 1) {
+      onChange(+page - 1);
     }
   };
 
   return (
     <div className={styles.root}>
-      <button className={styles.prev} onClick={handlePrevPage} disabled={page <= 1}>
+      <Button className={styles.prev} disabled={+page <= 1} onClick={handleClickPrevPage}>
         Prev
-      </button>
+      </Button>
       <span className={styles.page}>
         <span className={styles.current}>{page}</span>
         из
         <span className={styles.total}>{totalPages}</span>
       </span>
-      <button className={styles.next} onClick={handleNextPage} disabled={page >= totalPages}>
+      <Button className={styles.next} disabled={+page >= totalPages} onClick={handleClickNextPage}>
         Next
-      </button>
+      </Button>
     </div>
   );
 };

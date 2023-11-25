@@ -1,44 +1,28 @@
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
+// import Link from 'next/link';
 
-import { Routes } from '@/utils/enums';
 import { Photo } from '@/utils/interfaces';
+// import { currentPage, defaultPerPage } from '@/utils/constants';
 import { Card } from '@/components/Card';
 import styles from './SearchResult.module.scss';
 
-interface Props {
-  searchResult: Photo[] | undefined;
-}
+type Props = {
+  photos: Photo[];
+};
 
-const SearchResult: React.FC<Props> = ({ searchResult }) => {
-  const router = useRouter();
-  const query = typeof router.query.query === 'string' ? router.query.query : '';
-  const page = typeof router.query.page === 'string' ? parseInt(router.query.page) : 1;
-  const per_page = typeof router.query.per_page === 'string' ? parseInt(router.query.per_page) : 10;
+const SearchResult: React.FC<Props> = ({ photos }) => {
+  // const router = useRouter();
+  // const { query = '', page = currentPage, per_page = defaultPerPage } = router.query;
+  // const { id = '' } = router.query;
 
-  const handleNavigate = (id: number) => {
-    if (query && query !== '') {
-      router.push(
-        `${Routes.ABOUT}/${id}?query=${query}&page=${page}&per_page=${per_page}`,
-        undefined,
-        {
-          scroll: false,
-        }
-      );
-    } else {
-      router.push(`${Routes.ABOUT}/${id}?page=${page}&per_page=${per_page}`, undefined, {
-        scroll: false,
-      });
-    }
-  };
-
-  if (!searchResult) {
+  if (!photos.length) {
     return <div className={styles.root}>No cards available</div>;
   }
 
   return (
     <div className={styles.root}>
-      {searchResult.map((photo: Photo) => (
-        <Card key={photo.id} {...photo} onClickCard={() => handleNavigate(photo.id)} />
+      {photos.map((photo: Photo) => (
+        <Card key={photo.id} {...photo} />
       ))}
     </div>
   );

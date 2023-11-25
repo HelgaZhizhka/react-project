@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/Button';
 import styles from './ErrorComponent.module.scss';
 
-interface Props {
+type Props = {
   className: string;
-}
+};
 
 const ErrorComponent: React.FC<Props> = ({ className }) => {
   const [throwError, setThrowError] = useState(false);

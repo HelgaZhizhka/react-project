@@ -2,6 +2,7 @@ import Head from 'next/head';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
 import { SearchResponse } from '@/utils/interfaces';
+import { currentPage, defaultPerPage } from '@/utils/constants';
 import { getPopularity, searchPhotos } from '@/lib/services/apiService';
 import { wrapper } from '@/lib/redux/store';
 
@@ -10,13 +11,15 @@ import LayoutPage from './layout';
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     const query = typeof context.query.query === 'string' ? context.query.query : '';
-    const page = typeof context.query.page === 'string' ? parseInt(context.query.page) : 1;
+    const page =
+      typeof context.query.page === 'string' ? parseInt(context.query.page) : currentPage;
     const per_page =
-      typeof context.query.per_page === 'string' ? parseInt(context.query.per_page) : 10;
-    console.log(context.query);
+      typeof context.query.per_page === 'string'
+        ? parseInt(context.query.per_page)
+        : defaultPerPage;
     let data: SearchResponse;
 
-    if (query && query !== '') {
+    if (query) {
       data = await store.dispatch(searchPhotos.initiate({ query, page, per_page })).unwrap();
     } else {
       data = await store.dispatch(getPopularity.initiate({ page, per_page })).unwrap();

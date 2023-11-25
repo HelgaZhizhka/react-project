@@ -1,40 +1,48 @@
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+
+import { currentPage, defaultPerPage } from '@/utils/constants';
 import { Button } from '@/components/Button';
 import styles from './Search.module.scss';
 
-interface Props {
-  onSearch: (newValue: string) => void;
-}
+const Search: React.FC = () => {
+  const router = useRouter();
+  const { query = '', page = currentPage, per_page = defaultPerPage } = router.query;
+  const [searchValue, setSearchValue] = useState(query);
 
-const Search: React.FC<Props> = ({ onSearch }) => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    const formData = new FormData(event.currentTarget);
-    const query = formData.get('query');
-
-    if (typeof query === 'string') {
-      onSearch(query.trim());
+  const handleSearch = () => {
+    if (searchValue) {
+      router.push(`/?query=${searchValue}&page=${page}&per_page=${per_page}`);
+    } else {
+      router.push(`/?page=${page}&per_page=${per_page}`);
     }
+    setSearchValue('');
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => {
+    setSearchValue(value);
+  };
+
+  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (event.key === 'Enter') {
-      onSearch(event.currentTarget.value.trim());
+      setSearchValue(event.currentTarget.value);
+      handleSearch();
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className={styles.root}>
-        <input
-          className={styles.input}
-          type="text"
-          name="query"
-          onKeyDown={handleKeyDown}
-          placeholder="Search..."
-          autoFocus={true}
-        />
-        <Button type="submit">Search</Button>
-      </div>
-    </form>
+    <div className={styles.root}>
+      <input
+        className={styles.input}
+        type="text"
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        value={searchValue}
+        placeholder="Search..."
+        autoFocus={true}
+      />
+      <Button onClick={handleSearch}>Search</Button>
+    </div>
   );
 };
 
