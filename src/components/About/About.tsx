@@ -25,6 +25,7 @@ const About: React.FC<Props> = ({ photoData }) => {
 
   return (
     <aside className={styles.root}>
+      <div className={styles.overlay} onClick={handleClose}></div>
       <div className={styles.container}>
         <Button className={styles.close} onClick={handleClose}>
           Close
