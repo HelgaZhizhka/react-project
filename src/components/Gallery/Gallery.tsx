@@ -23,7 +23,7 @@ const Gallery: React.FC<Props> = ({ photos, totalResults }) => {
     <div className="container">
       <Search />
       <div className={styles.section}>
-        {photos.length > 0 ? <SearchResult photos={photos} /> : <NotFound />}
+        {photos?.length > 0 ? <SearchResult photos={photos} /> : <NotFound />}
       </div>
       <div className={styles.footer}>
         <Select value={+per_page} />

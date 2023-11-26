@@ -16,7 +16,7 @@ describe('SearchResult testing', () => {
     );
 
     const cards = screen.getAllByRole('listitem');
-    expect(cards).toHaveLength(PhotoData.length);
+    expect(cards).toHaveLength(PhotoData?.length);
   });
 
   it('should display a message if no cards are present', () => {

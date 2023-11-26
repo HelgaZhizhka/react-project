@@ -7,7 +7,7 @@ type Props = {
 };
 
 const SearchResult: React.FC<Props> = ({ photos }) => {
-  if (!photos.length) {
+  if (!photos?.length) {
     return <div className={styles.root}>No cards available</div>;
   }
 

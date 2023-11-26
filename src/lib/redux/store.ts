@@ -20,4 +20,4 @@ export const createStore = () =>
 export type AppStore = ReturnType<typeof createStore>;
 export type RootState = ReturnType<AppStore['getState']>;
 export type AppDispatch = AppStore['dispatch'];
-export const wrapper = createWrapper<AppStore>(createStore, { debug: true });
+export const wrapper = createWrapper<AppStore>(createStore);

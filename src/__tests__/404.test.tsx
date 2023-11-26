@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import Page404 from './404';
+import Page404 from '@/pages/404';
 
 describe('404 Page', () => {
   it('displays the correct content', () => {
