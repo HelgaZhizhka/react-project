@@ -6,7 +6,11 @@ import createMockRouter from '@/__testUtils__/createMockRouter';
 import About from './About';
 
 describe('Details Component', () => {
-  const mockRouter = createMockRouter({ query: { id: '247600' } });
+  const id = '247600';
+  const mockRouter = createMockRouter({
+    pathname: `/${id}`,
+    query: { query: '', page: '1', per_page: '10' },
+  });
 
   it('displays detailed card data correctly', async () => {
     render(

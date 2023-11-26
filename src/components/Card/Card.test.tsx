@@ -6,9 +6,8 @@ import { PhotoItem } from '@/__testUtils__/mockData';
 import Card from './Card';
 
 describe('Card Component', () => {
-  const mockRouter = createMockRouter({ query: { id: '247600' } });
-
   it('should renders relevant card data', () => {
+    const mockRouter = createMockRouter({ query: { query: '', page: '1', per_page: '10' } });
     render(
       <RouterContext.Provider value={mockRouter}>
         <Card {...PhotoItem} />
@@ -24,6 +23,11 @@ describe('Card Component', () => {
   });
 
   it('should display detailed information when isDetailed is true', () => {
+    const id = '247600';
+    const mockRouter = createMockRouter({
+      pathname: `/${id}`,
+      query: { query: '', page: '1', per_page: '10' },
+    });
     render(
       <RouterContext.Provider value={mockRouter}>
         <Card {...PhotoItem} isDetailed={true} />
@@ -36,6 +40,7 @@ describe('Card Component', () => {
   });
 
   it('should navigate to detailed page on card click', () => {
+    const mockRouter = createMockRouter({ query: { query: '', page: '1', per_page: '10' } });
     render(
       <RouterContext.Provider value={mockRouter}>
         <Card {...PhotoItem} />
