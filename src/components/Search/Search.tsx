@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { currentPage, defaultPerPage } from '@/utils/constants';
+import { currentPage, defaultPerPage } from '@/lib/types/constants';
 import { Button } from '@/components/Button';
 import styles from './Search.module.scss';
 

@@ -1,10 +1,9 @@
 import Head from 'next/head';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
-import { SearchResponse } from '@/types/interfaces';
-import { currentPage, defaultPerPage } from '@/utils/constants';
-import { getPopularity, searchPhotos } from '@/lib/services/apiService';
+import { currentPage, defaultPerPage } from '@/lib/types/constants';
 import { wrapper } from '@/lib/redux/store';
+import { fetchData } from '@/lib/helpers/fetchData';
 
 import LayoutPage from './layout';
 
@@ -17,13 +16,15 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
       typeof context.query.per_page === 'string'
         ? parseInt(context.query.per_page)
         : defaultPerPage;
-    let data: SearchResponse;
 
-    if (query) {
-      data = await store.dispatch(searchPhotos.initiate({ query, page, per_page })).unwrap();
-    } else {
-      data = await store.dispatch(getPopularity.initiate({ page, per_page })).unwrap();
-    }
+    const data = await fetchData(store, query, page, per_page);
+    // let data: SearchResponse;
+
+    // if (query) {
+    //   data = await store.dispatch(searchPhotos.initiate({ query, page, per_page })).unwrap();
+    // } else {
+    //   data = await store.dispatch(getPopularity.initiate({ page, per_page })).unwrap();
+    // }
 
     if (!data) {
       return { notFound: true };

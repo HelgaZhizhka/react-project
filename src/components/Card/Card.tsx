@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 
-import { Routes } from '@/types/enums';
-import { currentPage, defaultPerPage } from '@/utils/constants';
-import { Photo } from '@/types/interfaces';
+import { Routes } from '@/lib/types/enums';
+import { currentPage, defaultPerPage } from '@/lib/types/constants';
+import { Photo } from '@/lib/types/interfaces';
 import styles from './Card.module.scss';
 
 type Props = {

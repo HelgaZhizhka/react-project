@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
 
-import { Photo } from '@/types/interfaces';
-import { defaultPerPage } from '@/utils/constants';
+import { Photo } from '@/lib/types/interfaces';
+import { defaultPerPage } from '@/lib/types/constants';
 import { Pagination } from '@/components/Pagination';
 import { Search } from '@/components/Search';
 import { Select } from '@/components/Select';
 import { SearchResult } from '@/components/SearchResult';
-import { NotFound } from '../NotFound';
-import styles from '@/styles/Gallery.module.scss';
+import { NotFound } from '@/components/NotFound';
+import styles from './Gallery.module.scss';
 
 type Props = {
   photos: Photo[];

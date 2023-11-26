@@ -1,11 +1,12 @@
 import Head from 'next/head';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
-import { Photo, SearchResponse } from '@/types/interfaces';
-import { getPhoto, getPopularity, searchPhotos } from '@/lib/services/apiService';
+import { Photo } from '@/lib/types/interfaces';
+import { getPhoto } from '@/lib/services/apiService';
 import { wrapper } from '@/lib/redux/store';
 import { About } from '@/components/About';
 import LayoutPage from '../layout';
+import { fetchData } from '@/lib/helpers/fetchData';
 
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
@@ -21,13 +22,7 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
       photoData = await store.dispatch(getPhoto.initiate(+id)).unwrap();
     }
 
-    let data: SearchResponse | null = null;
-
-    if (query && query !== '') {
-      data = await store.dispatch(searchPhotos.initiate({ query, page, per_page })).unwrap();
-    } else {
-      data = await store.dispatch(getPopularity.initiate({ page, per_page })).unwrap();
-    }
+    const data = await fetchData(store, query, page, per_page);
 
     if (!data || !photoData) {
       return { notFound: true };

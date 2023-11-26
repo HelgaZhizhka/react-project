@@ -1,4 +1,4 @@
-import { Photo, SearchResponse } from '@/types/interfaces';
+import { Photo, SearchResponse } from '@/lib/types/interfaces';
 
 export const PhotoItem: Photo = {
   id: 247600,

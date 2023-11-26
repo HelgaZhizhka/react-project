@@ -1,4 +1,4 @@
-import { SIZE, SPINNER_VARIANT } from '@/types/types';
+import { SIZE, SPINNER_VARIANT } from '@/lib/types/types';
 import styles from './Spinner.module.scss';
 
 type Props = {

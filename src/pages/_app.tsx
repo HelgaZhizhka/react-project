@@ -3,7 +3,6 @@ import { Provider } from 'react-redux';
 
 import { wrapper } from '@/lib/redux/store';
 import { Layout } from '@/components/Layout';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
 import '@/styles/index.scss';
 
 const App = ({ Component, ...rest }: AppProps) => {
@@ -12,11 +11,9 @@ const App = ({ Component, ...rest }: AppProps) => {
 
   return (
     <Provider store={store}>
-      <ErrorBoundary>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ErrorBoundary>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </Provider>
   );
 };

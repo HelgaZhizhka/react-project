@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-import { currentPage, perPage } from '@/utils/constants';
+import { currentPage, perPage } from '@/lib/types/constants';
 import styles from './Select.module.scss';
 
 interface Props {

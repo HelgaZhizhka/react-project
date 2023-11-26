@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 
-import { currentPage, defaultPerPage } from '@/utils/constants';
-import { Routes } from '@/types/enums';
+import { currentPage, defaultPerPage } from '@/lib/types/constants';
+import { Routes } from '@/lib/types/enums';
 import { Button } from '@/components/Button';
-import { Photo } from '@/types/interfaces';
+import { Photo } from '@/lib/types/interfaces';
 import { Card } from '@/components/Card';
 import styles from './About.module.scss';
 

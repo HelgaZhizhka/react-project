@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-import { currentPage, defaultPerPage } from '@/utils/constants';
+import { currentPage, defaultPerPage } from '@/lib/types/constants';
 import { Button } from '@/components/Button';
 import styles from './Pagination.module.scss';
 
@@ -31,6 +31,10 @@ const Pagination: React.FC<Props> = ({ totalPages }) => {
       onChange(+page - 1);
     }
   };
+
+  if (totalPages === 0) {
+    return null;
+  }
 
   return (
     <div className={styles.root}>

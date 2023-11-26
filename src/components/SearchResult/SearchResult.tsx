@@ -1,4 +1,4 @@
-import { Photo } from '@/types/interfaces';
+import { Photo } from '@/lib/types/interfaces';
 import { Card } from '@/components/Card';
 import styles from './SearchResult.module.scss';
 
