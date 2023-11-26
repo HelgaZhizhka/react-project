@@ -1,0 +1,37 @@
+:root {
+  --color-white: #fff;
+  --color-black: #000;
+  --color-light: #f2f2f2;
+  --color-brand: #7678ed;
+  --color-brand00: rgba(118, 120, 237, 0);
+  --color-brand-hover: #3d348b;
+  --color-secondary: #f35b04;
+  --color-gray: #333;
+  --color-lightgray: #999;
+  --color-error: #dc3545;
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  --body-bg: var(--color-light);
+  --component-bg: var(--color-white);
+  --color-text: #343434;
+
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: var(--color-text);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --body-bg: #242424;
+    --component-bg: #312f2f;
+    --color-text: rgba(255, 255, 255, 0.87);
+  }
+}

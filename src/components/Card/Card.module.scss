@@ -1,0 +1,48 @@
+.root:not(.detailed) {
+  break-inside: avoid-column;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  background-color: var(--component-bg);
+  box-shadow: var(--shadow);
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: translateY(-10px);
+  }
+}
+
+.large {
+  grid-row: span 2;
+}
+
+.wrapper {
+  font-size: 0;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+
+.content {
+  padding: 8px;
+}
+
+.title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--color-brand);
+}
+
+.description {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-lightgray);
+  text-transform: uppercase;
+}

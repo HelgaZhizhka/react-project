@@ -1,0 +1,43 @@
+.root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  list-style: none;
+}
+
+.prev,
+.next,
+.total {
+  margin: 0 10px;
+  font-weight: 700;
+}
+
+.prev,
+.next {
+  border: 0;
+  padding: 5px 10px;
+  border-radius: 3px;
+  background-color: var(--color-brand);
+  color: var(--color-white);
+  cursor: pointer;
+  transition: transform 0.35s ease-in-out;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.current {
+  margin: 0 10px;
+  color: var(--color-brand);
+}
+
+.total {
+  font-weight: 600;
+}
