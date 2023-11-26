@@ -18,13 +18,6 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
         : defaultPerPage;
 
     const data = await fetchData(store, query, page, per_page);
-    // let data: SearchResponse;
-
-    // if (query) {
-    //   data = await store.dispatch(searchPhotos.initiate({ query, page, per_page })).unwrap();
-    // } else {
-    //   data = await store.dispatch(getPopularity.initiate({ page, per_page })).unwrap();
-    // }
 
     if (!data) {
       return { notFound: true };

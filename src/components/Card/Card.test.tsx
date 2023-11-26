@@ -25,7 +25,7 @@ describe('Card Component', () => {
   it('should display detailed information when isDetailed is true', () => {
     const id = '247600';
     const mockRouter = createMockRouter({
-      pathname: `/${id}`,
+      pathname: `/about/${id}`,
       query: { query: '', page: '1', per_page: '10' },
     });
     render(

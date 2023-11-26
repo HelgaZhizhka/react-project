@@ -8,17 +8,18 @@ import About from './About';
 describe('Details Component', () => {
   const id = '247600';
   const mockRouter = createMockRouter({
-    pathname: `/${id}`,
+    pathname: `/about/${id}`,
     query: { query: '', page: '1', per_page: '10' },
   });
 
   it('displays detailed card data correctly', async () => {
-    render(
+    const asFragment = render(
       <RouterContext.Provider value={mockRouter}>
         <About photoData={PhotoItem} />
       </RouterContext.Provider>
     );
     const closeButton = screen.getByText(/Close/i);
+    expect(asFragment).toMatchSnapshot();
 
     await waitFor(() => {
       expect(closeButton).toBeInTheDocument();

@@ -1,6 +1,7 @@
 import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { wrapper } from '@/lib/redux/store';
 import { Layout } from '@/components/Layout';
 import '@/styles/index.scss';
@@ -11,9 +12,11 @@ const App = ({ Component, ...rest }: AppProps) => {
 
   return (
     <Provider store={store}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <ErrorBoundary>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ErrorBoundary>
     </Provider>
   );
 };

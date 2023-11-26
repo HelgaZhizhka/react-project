@@ -1,4 +1,7 @@
+import { useState } from 'react';
+
 import { Button } from '@/components/Button';
+import Error from '@/pages/_error';
 import styles from './ErrorComponent.module.scss';
 
 type Props = {
@@ -6,14 +9,20 @@ type Props = {
 };
 
 const ErrorComponent: React.FC<Props> = ({ className }) => {
+  const [isError, setIsError] = useState(false);
+
   const handleClick = () => {
-    throw new Error('I crashed!');
+    setIsError(true);
+    console.error('I am an crashed!');
   };
 
   return (
-    <Button className={`${styles.button} ${className}`} onClick={handleClick}>
-      Trigger Error
-    </Button>
+    <>
+      {isError && <Error statusCode={300} />}
+      <Button className={`${styles.button} ${className}`} onClick={handleClick}>
+        Trigger Error
+      </Button>
+    </>
   );
 };
 
