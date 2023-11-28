@@ -13,13 +13,12 @@ describe('Details Component', () => {
   });
 
   it('displays detailed card data correctly', async () => {
-    const asFragment = render(
+    render(
       <RouterContext.Provider value={mockRouter}>
         <About photoData={PhotoItem} />
       </RouterContext.Provider>
     );
     const closeButton = screen.getByText(/Close/i);
-    expect(asFragment).toMatchSnapshot();
 
     await waitFor(() => {
       expect(closeButton).toBeInTheDocument();

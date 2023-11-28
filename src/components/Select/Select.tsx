@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-import { currentPage, perPage } from '@/lib/types/constants';
+import { perPage } from '@/lib/types/constants';
 import styles from './Select.module.scss';
 
 interface Props {
@@ -10,14 +10,14 @@ interface Props {
 
 const Select: React.FC<Props> = ({ value, className }) => {
   const router = useRouter();
-  const { query, page = currentPage } = router.query;
+  const { query } = router.query;
   const selectClass = className ? `${styles.root} ${className}` : styles.root;
 
   const handleChange: React.ChangeEventHandler<HTMLSelectElement> = ({ target: { value } }) => {
     if (query) {
-      router.push(`/?query=${query}&page=${page}&per_page=${value}`);
+      router.push(`/?query=${query}&page=1&per_page=${value}`);
     } else {
-      router.push(`/?page=${page}&per_page=${value}`);
+      router.push(`/?page=1&per_page=${value}`);
     }
   };
 
