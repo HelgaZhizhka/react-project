@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '@/hooks';
-import { fetchCountries } from '@/store/features/countriesSlice';
+import { useAppSelector } from '@/hooks';
 
 const CountryAutocomplete = () => {
-  const dispatch = useAppDispatch();
   const { countries, loading } = useAppSelector((state) => state.countries);
   const [inputValue, setInputValue] = useState('');
 
@@ -12,14 +10,13 @@ const CountryAutocomplete = () => {
     ? countries.filter((country) => country.toLowerCase().includes(inputValue.toLowerCase()))
     : [];
 
-  useEffect(() => {
-    if (countries.length === 0) {
-      dispatch(fetchCountries());
-    }
-  }, [countries.length, dispatch]);
-
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => {
     setInputValue(value);
+  };
+
+  const handleClickCountryList: React.MouseEventHandler<HTMLLIElement> = ({ target }) => {
+    const { innerText } = target as HTMLLIElement;
+    setInputValue(innerText);
   };
 
   if (loading) {
@@ -28,10 +25,11 @@ const CountryAutocomplete = () => {
 
   return (
     <div>
-      <label htmlFor="userCountry"></label>
+      <label htmlFor="userCountry">Country</label>
       <input
         type="text"
         id="userCountry"
+        name="country"
         value={inputValue}
         onChange={handleChange}
         placeholder="Country"
@@ -40,7 +38,9 @@ const CountryAutocomplete = () => {
       {inputValue && (
         <ul>
           {filteredCountries.map((country) => (
-            <li key={country}>{country}</li>
+            <li key={country} onClick={handleClickCountryList}>
+              {country}
+            </li>
           ))}
         </ul>
       )}

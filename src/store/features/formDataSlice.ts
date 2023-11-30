@@ -1,9 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-  formData: {
-    image: null,
-  },
+import { FormData } from '@/types/types';
+
+interface FormState {
+  values: FormData[];
+}
+
+const initialState: FormState = {
+  values: [],
 };
 
 export const formDataSlice = createSlice({
@@ -11,14 +15,11 @@ export const formDataSlice = createSlice({
   initialState,
   reducers: {
     submitFormData: (state, action) => {
-      state.formData = { ...state.formData, ...action.payload };
-    },
-    uploadImage: (state, action) => {
-      state.formData.image = action.payload;
+      state.values.push(action.payload);
     },
   },
 });
 
-export const { submitFormData, uploadImage } = formDataSlice.actions;
+export const { submitFormData } = formDataSlice.actions;
 
 export default formDataSlice.reducer;

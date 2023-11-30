@@ -1,5 +1,17 @@
-import Routes from '@/routes/Routes';
+import { useEffect } from 'react';
 
-const App: React.FC = () => <Routes />;
+import { useAppDispatch } from '@/hooks';
+import { fetchCountries } from '@/store/features/countriesSlice';
+import { Routes } from '@/routes';
+
+const App: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCountries());
+  }, [dispatch]);
+
+  return <Routes />;
+};
 
 export default App;
