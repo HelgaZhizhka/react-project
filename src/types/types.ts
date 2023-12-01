@@ -1,10 +1,10 @@
-export type FormData = {
-  name: string;
-  email: string;
-  age: number;
-  password: string;
-  gender: string;
-  acceptTerms: boolean;
-  country: string;
-  image: string | null;
-};
+// export type FormData = {
+//   name: string;
+//   email: string;
+//   age: number;
+//   password: string;
+//   gender: string;
+//   // country: string;
+//   acceptTerms?: boolean;
+//   confirmPassword?: string;
+// };

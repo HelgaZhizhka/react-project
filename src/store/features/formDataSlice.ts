@@ -1,6 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-
-import { FormData } from '@/types/types';
+import { FormData } from '@/utils/validations';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 interface FormState {
   values: FormData[];
@@ -14,7 +13,7 @@ export const formDataSlice = createSlice({
   name: 'formData',
   initialState,
   reducers: {
-    submitFormData: (state, action) => {
+    submitFormData: (state, action: PayloadAction<FormData>) => {
       state.values.push(action.payload);
     },
   },

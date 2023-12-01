@@ -1,44 +1,72 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useAppSelector } from '@/hooks';
+import styles from './CountryAutocomplete.module.scss';
 
-const CountryAutocomplete = () => {
+type Props = {
+  className?: string;
+};
+
+const CountryAutocomplete: React.FC<Props> = ({ className }) => {
   const { countries, loading } = useAppSelector((state) => state.countries);
   const [inputValue, setInputValue] = useState('');
+  const [show, setShow] = useState(false);
+  const list = useRef<HTMLDivElement>(null);
 
-  const filteredCountries = inputValue
-    ? countries.filter((country) => country.toLowerCase().includes(inputValue.toLowerCase()))
-    : [];
+  const filteredCountries = useMemo(
+    () => countries.filter((country) => country.toLowerCase().includes(inputValue.toLowerCase())),
+    [countries, inputValue]
+  );
+
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
+      if (list.current && !list.current.contains(event.target as Node)) {
+        setShow(false);
+      }
+    },
+    [list]
+  );
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => {
     setInputValue(value);
+    setShow(true);
   };
 
-  const handleClickCountryList: React.MouseEventHandler<HTMLLIElement> = ({ target }) => {
-    const { innerText } = target as HTMLLIElement;
-    setInputValue(innerText);
-  };
+  const handleClickCountryList = useCallback<React.MouseEventHandler<HTMLLIElement>>(
+    ({ currentTarget }) => {
+      setInputValue(currentTarget.innerText);
+      setShow(false);
+    },
+    []
+  );
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [handleClickOutside]);
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
-      <label htmlFor="userCountry">Country</label>
+    <div className={`${styles.root} ${className ? className : ''}`} ref={list}>
+      <label className="form__label" htmlFor="userCountry">
+        Country
+      </label>
       <input
         type="text"
         id="userCountry"
         name="country"
         value={inputValue}
         onChange={handleChange}
-        placeholder="Country"
+        placeholder="Your country"
         autoComplete="nope"
       />
-      {inputValue && (
-        <ul>
+      {show && (
+        <ul className={styles.list}>
           {filteredCountries.map((country) => (
-            <li key={country} onClick={handleClickCountryList}>
+            <li className={styles.listItem} key={country} onClick={handleClickCountryList}>
               {country}
             </li>
           ))}

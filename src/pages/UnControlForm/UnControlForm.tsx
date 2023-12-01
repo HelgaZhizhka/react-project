@@ -1,17 +1,20 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch } from '@/hooks';
 import { submitFormData } from '@/store/features/formDataSlice';
-import { CountryAutocomplete } from '@/components/CountryAutocomplete';
+import { validationSchema } from '@/utils/validations';
 import { RoutePaths } from '@/routes/routes.enum';
+import { CountryAutocomplete } from '@/components/CountryAutocomplete';
+import { ValidationError } from 'yup';
 
 const UnControlForm: React.FC = () => {
   const navigate = useNavigate();
   const formRef = useRef(null);
   const dispatch = useAppDispatch();
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
     const form = formRef.current;
@@ -21,57 +24,97 @@ const UnControlForm: React.FC = () => {
     }
 
     const formData = new FormData(form);
+    try {
+      const data = {
+        name: formData.get('name') || '',
+        country: formData.get('country') || '',
+        age: Number(formData.get('age')) || 0,
+        email: formData.get('email') || '',
+        password: formData.get('password') || '',
+        confirmPassword: formData.get('confirmPassword') || '',
+        gender: formData.get('gender') || '',
+        acceptTerms: Boolean(formData.get('acceptTerms')),
+      };
 
-    const extractedData = {
-      name: formData.get('name') || '',
-      email: formData.get('email') || '',
-      age: Number(formData.get('age')) || 0,
-      password: formData.get('password') || '',
-      gender: formData.get('gender') || '',
-      acceptTerms: Boolean(formData.get('accept')),
-      country: formData.get('country') || '',
-    };
+      const validateData = await validationSchema.validate(data, { abortEarly: false });
 
-    dispatch(submitFormData(extractedData));
-    navigate(RoutePaths.HOME);
+      console.log(validateData);
+
+      dispatch(submitFormData(data));
+      navigate(RoutePaths.HOME);
+    } catch (error) {
+      const validationErrors: Record<string, string> = {};
+      if (error instanceof ValidationError) {
+        error.inner.forEach((e) => {
+          if (e.path) validationErrors[e.path] = e.message;
+        });
+      }
+      setErrors(validationErrors);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} ref={formRef}>
-      <CountryAutocomplete />
-      <label htmlFor="userName">
-        Name:
+    <form className="form" onSubmit={handleSubmit} ref={formRef} noValidate>
+      <div className="form__row">
+        <label className="form__label" htmlFor="userName">
+          Name:
+        </label>
         <input type="text" id="userName" name="name" />
-      </label>
-      <label htmlFor="userAge">
-        Age:
+        {errors.name && <span className="form__error">{errors.name}</span>}
+      </div>
+      <div className="form__row">
+        <CountryAutocomplete />
+        {errors.country && <span className="form__error">{errors.country}</span>}
+      </div>
+      <div className="form__row">
+        <label className="form__label" htmlFor="userAge">
+          Age:
+        </label>
         <input type="number" id="userAge" name="age" />
-      </label>
-      <label htmlFor="userEmail">
-        Email:
+        {errors.age && <span className="form__error">{errors.age}</span>}
+      </div>
+      <div className="form__row">
+        <label className="form__label" htmlFor="userEmail">
+          Email:
+        </label>
         <input type="email" id="userEmail" name="email" />
-      </label>
-      <label>
-        Password:
+        {errors.email && <span className="form__error">{errors.email}</span>}
+      </div>
+      <div className="form__row">
+        <label className="form__label" htmlFor="userPassword">
+          Password:
+        </label>
         <input type="password" id="userPassword" name="password" />
-      </label>
-      <label>
-        Confirm Password:
+        {errors.password && <span className="form__error">{errors.password}</span>}
+      </div>
+      <div className="form__row">
+        <label className="form__label" htmlFor="userConfirmPassword">
+          Confirm Password:
+        </label>
         <input type="password" id="userConfirmPassword" name="confirmPassword" />
-      </label>
-      <label htmlFor="Man">
-        Man:
+        {errors.confirmPassword && <span className="form__error">{errors.confirmPassword}</span>}
+      </div>
+      <div className="form__row form__row_flex">
+        <label className="form__label" htmlFor="Man">
+          Man:
+        </label>
         <input type="radio" id="Man" name="gender" value="man" />
-      </label>
-      <label htmlFor="Woman">
-        Woman:
+        <label className="form__label" htmlFor="Woman">
+          Woman:
+        </label>
         <input type="radio" id="Woman" name="gender" value="woman" />
-      </label>
-      <label htmlFor="userAccept">
-        <input type="checkbox" name="accept" id="userAccept" />
-        Agree to Terms and Conditions
-      </label>
-      <button type="submit">Send</button>
+        {errors.gender && <span className="form__error">{errors.gender}</span>}
+      </div>
+      <div className="form__row">
+        <label htmlFor="userAccept">
+          <input type="checkbox" name="acceptTerms" id="userAccept" />
+          Agree to Terms and Conditions
+        </label>
+        {errors.acceptTerms && <span className="form__error">{errors.acceptTerms}</span>}
+      </div>
+      <div className="form__footer">
+        <button type="submit">Send</button>
+      </div>
     </form>
   );
 };
