@@ -5,7 +5,7 @@ import { useAppDispatch } from '@/hooks';
 import { submitFormData } from '@/store/features/formDataSlice';
 import { validationSchema } from '@/utils/validations';
 import { RoutePaths } from '@/routes/routes.enum';
-import { CountryAutocomplete } from '@/components/CountryAutocomplete';
+import { CountryAutocompleteNoControl } from '@/components/CountryAutocompleteNoControl';
 import { ValidationError } from 'yup';
 
 const UnControlForm: React.FC = () => {
@@ -38,9 +38,7 @@ const UnControlForm: React.FC = () => {
 
       const validateData = await validationSchema.validate(data, { abortEarly: false });
 
-      console.log(validateData);
-
-      dispatch(submitFormData(data));
+      dispatch(submitFormData(validateData));
       navigate(RoutePaths.HOME);
     } catch (error) {
       const validationErrors: Record<string, string> = {};
@@ -63,7 +61,7 @@ const UnControlForm: React.FC = () => {
         {errors.name && <span className="form__error">{errors.name}</span>}
       </div>
       <div className="form__row">
-        <CountryAutocomplete />
+        <CountryAutocompleteNoControl />
         {errors.country && <span className="form__error">{errors.country}</span>}
       </div>
       <div className="form__row">
@@ -98,7 +96,7 @@ const UnControlForm: React.FC = () => {
         <label className="form__label" htmlFor="Man">
           Man:
         </label>
-        <input type="radio" id="Man" name="gender" value="man" />
+        <input type="radio" id="Man" name="gender" value="man" defaultChecked />
         <label className="form__label" htmlFor="Woman">
           Woman:
         </label>

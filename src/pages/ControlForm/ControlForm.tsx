@@ -6,7 +6,6 @@ import { useAppDispatch } from '@/hooks';
 import { FormData, validationSchema } from '@/utils/validations';
 import { submitFormData } from '@/store/features/formDataSlice';
 import { RoutePaths } from '@/routes/routes.enum';
-import { CountryAutocomplete } from '@/components/CountryAutocomplete';
 
 const ControlForm: React.FC = () => {
   const {
@@ -40,7 +39,6 @@ const ControlForm: React.FC = () => {
           {errors.name && <span className="form__error">{errors.name.message}</span>}
         </div>
         <div className="form__row">
-          <CountryAutocomplete />
           {errors.country && <span className="form__error">{errors.country.message}</span>}
         </div>
         <div className="form__row">
