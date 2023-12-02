@@ -1,8 +1,13 @@
-import { FormData } from '@/utils/validations';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+import { FormData } from '@/utils/validations';
+
+export interface UpdateFormData extends Omit<FormData, 'image'> {
+  image: string | null;
+}
+
 interface FormState {
-  values: FormData[];
+  values: UpdateFormData[];
 }
 
 const initialState: FormState = {
@@ -13,8 +18,8 @@ export const formDataSlice = createSlice({
   name: 'formData',
   initialState,
   reducers: {
-    submitFormData: (state, action: PayloadAction<FormData>) => {
-      state.values.push(action.payload);
+    submitFormData: (state, action: PayloadAction<UpdateFormData>) => {
+      state.values = state.values.concat(action.payload);
     },
   },
 });

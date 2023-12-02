@@ -1,18 +1,21 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ValidationError } from 'yup';
 
 import { useAppDispatch } from '@/hooks';
 import { submitFormData } from '@/store/features/formDataSlice';
 import { validationSchema } from '@/utils/validations';
+import { convertToBase64 } from '@/utils/convertImageToBase64';
 import { RoutePaths } from '@/routes/routes.enum';
 import { CountryAutocompleteNoControl } from '@/components/CountryAutocompleteNoControl';
-import { ValidationError } from 'yup';
+import { evaluatePasswordStrength } from '@/utils/evaluatePasswordStrength';
 
 const UnControlForm: React.FC = () => {
   const navigate = useNavigate();
   const formRef = useRef(null);
   const dispatch = useAppDispatch();
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [passwordStrength, setPasswordStrength] = useState(0);
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -25,6 +28,8 @@ const UnControlForm: React.FC = () => {
 
     const formData = new FormData(form);
     try {
+      const imageFile = formData.get('image') as File | null;
+
       const data = {
         name: formData.get('name') || '',
         country: formData.get('country') || '',
@@ -36,9 +41,19 @@ const UnControlForm: React.FC = () => {
         acceptTerms: Boolean(formData.get('acceptTerms')),
       };
 
-      const validateData = await validationSchema.validate(data, { abortEarly: false });
+      const validationData = await validationSchema.validate(
+        { ...data, image: [imageFile] },
+        { abortEarly: false }
+      );
 
-      dispatch(submitFormData(validateData));
+      const imageBase64 = imageFile ? await convertToBase64(imageFile) : null;
+
+      const storeData = {
+        ...validationData,
+        image: imageBase64 as string,
+      };
+
+      dispatch(submitFormData(storeData));
       navigate(RoutePaths.HOME);
     } catch (error) {
       const validationErrors: Record<string, string> = {};
@@ -49,6 +64,13 @@ const UnControlForm: React.FC = () => {
       }
       setErrors(validationErrors);
     }
+  };
+
+  const handlerChangePassword: React.ChangeEventHandler<HTMLInputElement> = ({
+    target: { value },
+  }) => {
+    const strengthPassword = evaluatePasswordStrength(value);
+    setPasswordStrength(strengthPassword);
   };
 
   return (
@@ -82,7 +104,9 @@ const UnControlForm: React.FC = () => {
         <label className="form__label" htmlFor="userPassword">
           Password:
         </label>
-        <input type="password" id="userPassword" name="password" />
+        <input type="password" id="userPassword" name="password" onChange={handlerChangePassword} />
+        <span>{passwordStrength}</span>
+        {passwordStrength >= 4 ? <span>Strong password 👍</span> : <span>Weak password👎</span>}
         {errors.password && <span className="form__error">{errors.password}</span>}
       </div>
       <div className="form__row">
@@ -102,6 +126,11 @@ const UnControlForm: React.FC = () => {
         </label>
         <input type="radio" id="Woman" name="gender" value="woman" />
         {errors.gender && <span className="form__error">{errors.gender}</span>}
+      </div>
+      <div className="form__row">
+        <label htmlFor="userImage">Upload file</label>
+        <input type="file" name="image" id="userImage" />
+        {errors.image && <span className="form__error">{errors.image}</span>}
       </div>
       <div className="form__row">
         <label htmlFor="userAccept">

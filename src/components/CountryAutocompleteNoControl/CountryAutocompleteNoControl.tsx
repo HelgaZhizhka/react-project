@@ -3,11 +3,7 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import { CountryList } from '@/components/CountryList';
 import styles from './CountryAutocompleteNoControl.module.scss';
 
-type Props = {
-  className?: string;
-};
-
-const CountryAutocompleteNoControl: React.FC<Props> = ({ className }) => {
+const CountryAutocompleteNoControl: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const list = useRef<HTMLDivElement>(null);
@@ -45,7 +41,7 @@ const CountryAutocompleteNoControl: React.FC<Props> = ({ className }) => {
   }, [handleClickOutside]);
 
   return (
-    <div className={`${styles.root} ${className ? className : ''}`} ref={list}>
+    <div className={styles.root} ref={list}>
       <label className="form__label" htmlFor="userCountry">
         Country
       </label>

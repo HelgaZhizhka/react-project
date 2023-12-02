@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { useAppSelector } from '@/hooks';
 import styles from './CountryList.module.scss';
@@ -17,18 +17,16 @@ const CountryList: React.FC<Props> = ({ inputValue, onClose, onSelect }) => {
     [countries, inputValue]
   );
 
-  const handleClickCountryList = useCallback<React.MouseEventHandler<HTMLLIElement>>(
-    ({ currentTarget }) => {
-      onSelect(currentTarget.innerText);
-      onClose();
-    },
-    [onSelect, onClose]
-  );
+  const handleChangeCountryList: React.MouseEventHandler<HTMLLIElement> = (event) => {
+    event.preventDefault;
+    onSelect(event.currentTarget.innerText);
+    onClose();
+  };
 
   return (
     <ul className={styles.root}>
       {filteredCountries.map((country) => (
-        <li className={styles.listItem} key={country} onClick={handleClickCountryList}>
+        <li className={styles.listItem} key={country} onMouseDown={handleChangeCountryList}>
           {country}
         </li>
       ))}

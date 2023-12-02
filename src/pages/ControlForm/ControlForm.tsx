@@ -4,8 +4,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch } from '@/hooks';
 import { FormData, validationSchema } from '@/utils/validations';
+import { convertToBase64 } from '@/utils/convertImageToBase64';
+import { evaluatePasswordStrength } from '@/utils/evaluatePasswordStrength';
 import { submitFormData } from '@/store/features/formDataSlice';
 import { RoutePaths } from '@/routes/routes.enum';
+import { CountryAutocompleteControl } from '@/components/CountryAutocompleteControl';
 
 const ControlForm: React.FC = () => {
   const {
@@ -13,16 +16,27 @@ const ControlForm: React.FC = () => {
     handleSubmit,
     formState: { errors, isValid },
     reset,
+    watch,
   } = useForm({
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
   });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const password = watch('password');
+  const passwordStrength = evaluatePasswordStrength(password);
 
-  const handlerSubmit = (data: FormData) => {
-    console.log({ data });
-    dispatch(submitFormData(data));
+  const handlerSubmit = async (data: FormData) => {
+    const imageBase64 =
+      data.image instanceof FileList && data.image.length > 0
+        ? await convertToBase64(data?.image[0] as File)
+        : null;
+
+    const storeData = {
+      ...data,
+      image: imageBase64 as string | null,
+    };
+    dispatch(submitFormData(storeData));
     reset();
     navigate(RoutePaths.HOME);
   };
@@ -39,6 +53,7 @@ const ControlForm: React.FC = () => {
           {errors.name && <span className="form__error">{errors.name.message}</span>}
         </div>
         <div className="form__row">
+          <CountryAutocompleteControl {...register('country')} />
           {errors.country && <span className="form__error">{errors.country.message}</span>}
         </div>
         <div className="form__row">
@@ -72,6 +87,8 @@ const ControlForm: React.FC = () => {
             id="userPassword"
             required
           />
+          <span>{passwordStrength}</span>
+          {passwordStrength >= 4 ? <span>Strong password 👍</span> : <span>Weak password👎</span>}
           {errors.password && <span className="form__error">{errors.password.message}</span>}
         </div>
         <div className="form__row">
@@ -92,11 +109,16 @@ const ControlForm: React.FC = () => {
         <div className="form__row form__row_flex">
           <label className="form__label">Gender *:</label>
           <label htmlFor="Man">Man:</label>
-          <input type="radio" {...register('gender')} id="Man" value="man" />
+          <input type="radio" {...register('gender')} id="Man" value="man" defaultChecked />
           <label className="form__label" htmlFor="Woman">
             Woman:
           </label>
           <input type="radio" {...register('gender')} id="Woman" value="woman" />
+          {errors.gender && <span className="form__error">{errors.gender.message}</span>}
+        </div>
+        <div className="form__row">
+          <label htmlFor="userImage">Upload file</label>
+          <input type="file" {...register('image')} id="userImage" />
           {errors.gender && <span className="form__error">{errors.gender.message}</span>}
         </div>
         <div className="form__row">

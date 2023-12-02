@@ -1,8 +1,8 @@
-import { FormData } from '@/utils/validations';
+import { UpdateFormData } from '@/store/features/formDataSlice';
 import styles from './Gallery.module.scss';
 
 type Props = {
-  data: FormData[];
+  data: UpdateFormData[];
 };
 const Gallery: React.FC<Props> = ({ data }) => (
   <div className={styles.root}>
@@ -15,6 +15,7 @@ const Gallery: React.FC<Props> = ({ data }) => (
           <p>{item.age}</p>
           <p>{item.password}</p>
           <p>{item.gender}</p>
+          <p>{item.image && <img src={item.image} alt={item.name} />}</p>
           <p>{item.acceptTerms ? 'accept terms' : 'no accept terms'}</p>
         </div>
       ))}

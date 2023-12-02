@@ -1,12 +1,13 @@
 export const evaluatePasswordStrength = (password?: string) => {
-  let strength = 0;
+  const rules = [
+    (str: string) => str.length > 8,
+    (str: string) => /[A-Z]/.test(str),
+    (str: string) => /[a-z]/.test(str),
+    (str: string) => /\d/.test(str),
+    (str: string) => /[\^$*.\[\]{}()?\-"!@#%&/,><':;|_~`]/.test(str),
+  ];
 
-  if (!password) return strength;
+  if (!password) return 0;
 
-  if (password.length > 8) strength += 1;
-  if (/[A-Z]/.test(password)) strength += 1;
-  if (/[a-z]/.test(password)) strength += 1;
-  if (/\d/.test(password)) strength += 1;
-  if (/[\^$*.\[\]{}()?\-"!@#%&/,><':;|_~`]/.test(password)) strength += 1;
-  return strength;
+  return rules.reduce((strength, rule) => strength + (rule(password) ? 1 : 0), 0);
 };
