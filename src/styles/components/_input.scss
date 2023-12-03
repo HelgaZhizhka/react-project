@@ -1,0 +1,14 @@
+.input {
+    padding-left: 8px;
+    height: 40px;
+    padding-right: 8px;
+    line-height: 1.4;
+    background-color: var(--component-bg);
+    border: 1px solid var(--border-color);
+    font-size: 1rem;
+    color: var(--color-text);
+
+    &::placeholder {
+        color: var(--color-lightgray)
+    }
+}

@@ -1,0 +1,94 @@
+.form {
+  &__row {
+    position: relative;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+
+    &_flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  &__footer {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  &__error {
+    display: block;
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    font-size: 0.75rem;
+    line-height: 1;
+    color: var(--color-error);
+  }
+
+  &__text {
+    display: block;
+    font-weight: 600;
+
+    + .form__text {
+      margin-left: .5rem;
+    }
+  }
+
+  &_horizontal {
+    width: 100%;
+
+    .input,
+    .button {
+      width: 100%;
+    }
+  }
+
+  .is-flex {
+    align-items: center;
+  }
+}
+
+.file-upload {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 40px;
+
+  input[type='file'] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
+  .label {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+
+    &:hover {
+
+      .button_bordered {
+        background-color: var(--color-brand);
+        color: var(--color-white);
+      }
+    }
+  }
+
+  .button {
+    text-transform: none;
+  }
+}

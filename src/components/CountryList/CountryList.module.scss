@@ -1,0 +1,26 @@
+.root {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: var(--component-bg);
+  box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+  list-style: none;
+  color: var(--color-text);
+  z-index: 10;
+}
+
+.listItem {
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color .3s ease-in-out;
+  
+  &:hover {
+    background-color: var(--color-brand);
+    color: var(--color-white);
+  }
+}
