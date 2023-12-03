@@ -59,9 +59,6 @@ const ControlForm: React.FC = () => {
           {errors.name && <span className="form__error">{errors.name.message}</span>}
         </div>
         <div className="form__row">
-          <label className="form__label label" htmlFor="userCountry">
-            Country
-          </label>
           <CountryAutocompleteControl {...register('country')} />
           {errors.country && <span className="form__error">{errors.country.message}</span>}
         </div>

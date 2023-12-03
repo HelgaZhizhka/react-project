@@ -26,6 +26,9 @@ const CountryAutocompleteNoControl: React.FC = () => {
 
   return (
     <>
+      <label className="form__label label" htmlFor="userCountry">
+        Country
+      </label>
       <input
         className="input"
         type="text"

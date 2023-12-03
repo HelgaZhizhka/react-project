@@ -84,9 +84,6 @@ const UnControlForm: React.FC = () => {
           {errors.name && <span className="form__error">{errors.name}</span>}
         </div>
         <div className="form__row">
-          <label className="form__label label" htmlFor="userCountry">
-            Country
-          </label>
           <CountryAutocompleteNoControl />
           {errors.country && <span className="form__error">{errors.country}</span>}
         </div>
@@ -94,14 +91,28 @@ const UnControlForm: React.FC = () => {
           <label className="form__label label" htmlFor="userAge">
             Age:
           </label>
-          <input className="input" type="number" id="userAge" name="age" required />
+          <input
+            className="input"
+            type="number"
+            id="userAge"
+            name="age"
+            autoComplete="nop"
+            required
+          />
           {errors.age && <span className="form__error">{errors.age}</span>}
         </div>
         <div className="form__row">
           <label className="form__label label" htmlFor="userEmail">
             Email:
           </label>
-          <input className="input" type="email" id="userEmail" name="email" required />
+          <input
+            className="input"
+            type="email"
+            id="userEmail"
+            name="email"
+            autoComplete="nop"
+            required
+          />
           {errors.email && <span className="form__error">{errors.email}</span>}
         </div>
         <div className="form__row">

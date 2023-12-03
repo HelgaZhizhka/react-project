@@ -30,6 +30,9 @@ const CountryAutocompleteControl = React.forwardRef<HTMLInputElement, GenericInp
 
     return (
       <>
+        <label className="form__label label" htmlFor="userCountry">
+          Country
+        </label>
         <input
           className="input"
           type="text"
