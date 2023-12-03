@@ -1,12 +1,10 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 
 import { CountryList } from '@/components/CountryList';
-import styles from './CountryAutocompleteNoControl.module.scss';
 
 const CountryAutocompleteNoControl: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-  const list = useRef<HTMLDivElement>(null);
 
   const closeList = () => {
     setIsOpen(false);
@@ -26,26 +24,10 @@ const CountryAutocompleteNoControl: React.FC = () => {
     closeList();
   };
 
-  const handleClickOutside = useCallback(
-    (event: MouseEvent) => {
-      if (list.current && !list.current.contains(event.target as Node)) {
-        closeList();
-      }
-    },
-    [list]
-  );
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [handleClickOutside]);
-
   return (
-    <div className={styles.root} ref={list}>
-      <label className="form__label" htmlFor="userCountry">
-        Country
-      </label>
+    <>
       <input
+        className="input"
         type="text"
         id="userCountry"
         name="country"
@@ -57,7 +39,7 @@ const CountryAutocompleteNoControl: React.FC = () => {
       {isOpen && (
         <CountryList inputValue={inputValue} onSelect={handlerSelectList} onClose={closeList} />
       )}
-    </div>
+    </>
   );
 };
 

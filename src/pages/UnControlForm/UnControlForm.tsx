@@ -74,75 +74,123 @@ const UnControlForm: React.FC = () => {
   };
 
   return (
-    <form className="form" onSubmit={handleSubmit} ref={formRef} noValidate>
-      <div className="form__row">
-        <label className="form__label" htmlFor="userName">
-          Name:
-        </label>
-        <input type="text" id="userName" name="name" />
-        {errors.name && <span className="form__error">{errors.name}</span>}
-      </div>
-      <div className="form__row">
-        <CountryAutocompleteNoControl />
-        {errors.country && <span className="form__error">{errors.country}</span>}
-      </div>
-      <div className="form__row">
-        <label className="form__label" htmlFor="userAge">
-          Age:
-        </label>
-        <input type="number" id="userAge" name="age" />
-        {errors.age && <span className="form__error">{errors.age}</span>}
-      </div>
-      <div className="form__row">
-        <label className="form__label" htmlFor="userEmail">
-          Email:
-        </label>
-        <input type="email" id="userEmail" name="email" />
-        {errors.email && <span className="form__error">{errors.email}</span>}
-      </div>
-      <div className="form__row">
-        <label className="form__label" htmlFor="userPassword">
-          Password:
-        </label>
-        <input type="password" id="userPassword" name="password" onChange={handlerChangePassword} />
-        <span>{passwordStrength}</span>
-        {passwordStrength >= 4 ? <span>Strong password 👍</span> : <span>Weak password👎</span>}
-        {errors.password && <span className="form__error">{errors.password}</span>}
-      </div>
-      <div className="form__row">
-        <label className="form__label" htmlFor="userConfirmPassword">
-          Confirm Password:
-        </label>
-        <input type="password" id="userConfirmPassword" name="confirmPassword" />
-        {errors.confirmPassword && <span className="form__error">{errors.confirmPassword}</span>}
-      </div>
-      <div className="form__row form__row_flex">
-        <label className="form__label" htmlFor="Man">
-          Man:
-        </label>
-        <input type="radio" id="Man" name="gender" value="man" defaultChecked />
-        <label className="form__label" htmlFor="Woman">
-          Woman:
-        </label>
-        <input type="radio" id="Woman" name="gender" value="woman" />
-        {errors.gender && <span className="form__error">{errors.gender}</span>}
-      </div>
-      <div className="form__row">
-        <label htmlFor="userImage">Upload file</label>
-        <input type="file" name="image" id="userImage" />
-        {errors.image && <span className="form__error">{errors.image}</span>}
-      </div>
-      <div className="form__row">
-        <label htmlFor="userAccept">
-          <input type="checkbox" name="acceptTerms" id="userAccept" />
-          Agree to Terms and Conditions
-        </label>
-        {errors.acceptTerms && <span className="form__error">{errors.acceptTerms}</span>}
-      </div>
-      <div className="form__footer">
-        <button type="submit">Send</button>
-      </div>
-    </form>
+    <div className="container page">
+      <form className="form form_horizontal" onSubmit={handleSubmit} ref={formRef} noValidate>
+        <div className="form__row">
+          <label className="form__label label" htmlFor="userName">
+            Name:
+          </label>
+          <input className="input" type="text" id="userName" name="name" required />
+          {errors.name && <span className="form__error">{errors.name}</span>}
+        </div>
+        <div className="form__row">
+          <label className="form__label label" htmlFor="userCountry">
+            Country
+          </label>
+          <CountryAutocompleteNoControl />
+          {errors.country && <span className="form__error">{errors.country}</span>}
+        </div>
+        <div className="form__row">
+          <label className="form__label label" htmlFor="userAge">
+            Age:
+          </label>
+          <input className="input" type="number" id="userAge" name="age" required />
+          {errors.age && <span className="form__error">{errors.age}</span>}
+        </div>
+        <div className="form__row">
+          <label className="form__label label" htmlFor="userEmail">
+            Email:
+          </label>
+          <input className="input" type="email" id="userEmail" name="email" required />
+          {errors.email && <span className="form__error">{errors.email}</span>}
+        </div>
+        <div className="form__row">
+          <label className="form__label label" htmlFor="userPassword">
+            Password:
+          </label>
+          <input
+            className="input"
+            type="password"
+            id="userPassword"
+            name="password"
+            onChange={handlerChangePassword}
+            required
+          />
+          {passwordStrength > 0 && (
+            <span className="is-flex">
+              <span className="form__text">{passwordStrength}</span>
+              {passwordStrength >= 4 ? (
+                <span className="form__text text-success">Strong password 👍</span>
+              ) : (
+                <span className="form__text text-error">Weak password 👎</span>
+              )}
+            </span>
+          )}
+          {errors.password && <span className="form__error">{errors.password}</span>}
+        </div>
+        <div className="form__row">
+          <label className="form__label label" htmlFor="userConfirmPassword">
+            Confirm Password:
+          </label>
+          <input
+            className="input"
+            type="password"
+            id="userConfirmPassword"
+            name="confirmPassword"
+            required
+          />
+          {errors.confirmPassword && <span className="form__error">{errors.confirmPassword}</span>}
+        </div>
+        <div className="form__row">
+          <label className="form__label label">Gender *:</label>
+          <div className="is-flex">
+            <label className="label" htmlFor="Man">
+              <input
+                className="radio"
+                type="radio"
+                id="Man"
+                name="gender"
+                value="man"
+                defaultChecked
+              />
+              <span className="label">Man</span>
+            </label>
+            <label className="label" htmlFor="Woman">
+              <input className="radio" type="radio" id="Woman" name="gender" value="woman" />
+              <span className="label">Woman</span>
+            </label>
+          </div>
+          {errors.gender && <span className="form__error">{errors.gender}</span>}
+        </div>
+        <div className="form__row">
+          <div className="file-upload">
+            <label className="label" htmlFor="userImage">
+              <input type="file" name="image" id="userImage" accept="image/*" required />
+              <span className="button button_md button_bordered">Upload file</span>
+            </label>
+          </div>
+          {errors.image && <span className="form__error">{errors.image}</span>}
+        </div>
+        <div className="form__row">
+          <label className="label" htmlFor="userAccept">
+            <input
+              className="checkbox"
+              type="checkbox"
+              name="acceptTerms"
+              id="userAccept"
+              required
+            />
+            <span className="label">Agree to Terms and Conditions</span>
+          </label>
+          {errors.acceptTerms && <span className="form__error">{errors.acceptTerms}</span>}
+        </div>
+        <div className="form__footer">
+          <button className="button button_md button_primary" type="submit">
+            Send
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

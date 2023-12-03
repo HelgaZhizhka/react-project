@@ -1,6 +1,7 @@
 import * as yup from 'yup';
-import { validateFile } from './validationImage';
+
 import { passwordValidation } from './validationPassword';
+import { fileRequired, validateFileSize, validateFileType } from './validationImage';
 
 export const validationSchema = yup.object({
   name: yup
@@ -11,10 +12,10 @@ export const validationSchema = yup.object({
 
   age: yup
     .number()
+    .required('Age is required')
     .transform((value) => (isNaN(value) ? undefined : value))
     .nullable()
-    .positive('Age must be a positive number')
-    .required('Age is required'),
+    .positive('Age must be a positive number'),
   email: yup.string().email('Invalid email address').required('Email is required'),
   password: passwordValidation,
   confirmPassword: yup
@@ -24,13 +25,15 @@ export const validationSchema = yup.object({
   gender: yup.string().required('Gender selection is required'),
   image: yup
     .mixed()
-    .test('fileSize', 'File size is too large', (value) => {
-      return validateFile(value as FileList);
+    .test('fileRequired', 'Upload image is required', (value) => {
+      return fileRequired(value as FileList);
     })
     .test('fileType', 'Invalid file type. Only PNG and JPEG are allowed', (value) => {
-      return validateFile(value as FileList);
+      return validateFileType(value as FileList);
     })
-    .required('Upload image is required'),
+    .test('fileSize', 'File size is too large', (value) => {
+      return validateFileSize(value as FileList);
+    }),
   acceptTerms: yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
 });
 
